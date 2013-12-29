@@ -55,7 +55,7 @@ public class QueuePlugin implements Plugin {
 		
 		QLog.info("Bee Q plugin initialize begin");
 		/*******************DEBUG start*******************/
-		boolean debug = false;
+		boolean debug = true;
 		if(debug){
 			Map<String,String> map = new HashMap<String,String>();
 //			map.put("hibernate.show_sql", "true");
@@ -419,7 +419,7 @@ public class QueuePlugin implements Plugin {
 						}else{
 							gcvpunit1.setWindow(""+i);
 						}
-						
+						System.out.println(laneAll.size()+"-----------------------------");
 						gcvpunit1.setLanes(laneAll);
 						gcvpunit1.setMonitorUnit(mu1);		
 						try {
@@ -438,7 +438,8 @@ public class QueuePlugin implements Plugin {
 						}else{
 							beelineDash.setUsername("dash"+(j+1)+""+i);
 						}
-						beelineDash.setGroup(fils.get(i));
+						beelineDash.setGroup(fils.get(j));
+						System.out.println(laneAll.size());
 						beelineDash.setDashboardLanes(laneAll);
 						try {
 							beelineDash.setPasswordSalt(HashUtils.getSaltString());
