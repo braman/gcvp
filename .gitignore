@@ -1,0 +1,10 @@
+/documentation
+/work
+/target
+.svn/
+/resources
+/.settings
+/.classpath
+/.project
+/target
+bin/

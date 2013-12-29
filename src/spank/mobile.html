@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang='ru'>
+<head>
+<meta charset='utf8'>
+<meta content='width=device-width' name='viewport'>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="stylesheets/mobile/bootstrap-res.min_bootstrap.css"
+	rel="stylesheet" type="text/css" media="all" />
+
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="span3">
+			<table class="table table-striped table-bordered table-hover" id='tickets'>
+				<thead>
+					<tr>
+						<th>№</th>
+						<th>Номер</th>
+						<th>Время распечатки</th>									
+					</tr>
+				</thead>
+	
+				<tbody>
+					
+				</tbody>
+			</table>	
+			<a href='#' onclick="changeTicketNumber();">Поменять номер билета</a>
+		</div>
+	</div>
+	<script src="javascripts/mobile/jquery-1.7.1.min.js"></script>
+	<script src="javascripts/mobile/bootstrap.min.js"></script>
+
+
+
+	<script type="text/javascript">
+
+var myHost = "localhost:9090";
+//var myHost = "cq.b2e.kz";
+
+
+jQuery(document).ready(function(){
+	checkCookie();
+});
+function getCookie(c_name) {
+    var c_value = document.cookie;
+    var c_start = c_value.indexOf(" " + c_name + "=");
+    if (c_start == -1) {
+        c_start = c_value.indexOf(c_name + "=");
+    }
+    if (c_start == -1) {
+        c_value = null;
+    } else {
+        c_start = c_value.indexOf("=", c_start) + 1;
+        var c_end = c_value.indexOf(";", c_start);
+        if (c_end == -1) {
+            c_end = c_value.length;
+        }
+        c_value = unescape(c_value.substring(c_start, c_end));
+    }
+    return c_value;
+}
+
+function setCookie(c_name, value, exdays) {
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+    document.cookie = c_name + "=" + c_value;
+}
+
+function checkCookie() {
+    var filial = getCookie("filial");
+    if (filial != null && filial != "") {
+    	initMobile(getCookie('filial'));
+    } else {
+        var filial = prompt("Please enter your filial:", "");
+        var number = prompt("Please enter your ticket number:", "");
+        if (number != null && number != "") {
+        	var date = new Date();
+        	date.setTime(date.getTime()+(30*1000));
+            setCookie("number", number, date.toGMTString());
+        }
+        if (filial != null && filial != "") {
+        	var date = new Date();
+        	date.setTime(date.getTime()+(30*1000));
+            setCookie("filial", filial, date.toGMTString());
+            initMobile(filial);
+        }
+    }
+}
+function initGroup(){
+	var dataString = 'request=group';
+	jQuery.ajax
+	({
+		type: 'POST',
+		url: 'http://'+ myHost +'/plugins/beequeue/mobile',
+		dataType: 'json',
+		data: dataString,
+		success: function(data) {
+			preparePage(data);
+		}
+	});
+}
+
+function initMobile(group){
+	var dataString = 'request=ticket&group='+group;
+	jQuery.ajax
+	({
+		type: 'POST',
+		url: 'http://'+ myHost +'/plugins/beequeue/mobile',
+		dataType: 'json',
+		data: dataString,
+		success: function(data) {
+			preparePage(data);
+		}
+	});
+}
+function changeTicketNumber(){
+	var number = prompt("Please enter your ticket number:", "");
+    if (number != null && number != "") {
+    	var date = new Date();
+    	date.setTime(date.getTime()+(30*1000));
+        setCookie("number", number, date.toGMTString());
+    }
+    jQuery("#tickets tbody").empty();
+    initMobile(getCookie('filial'));
+	return false;
+}
+function preparePage(data){
+	if(data!=null){
+		jQuery(data.tickets).each(function(ix) {
+			var i = data.tickets[ix]
+			if(getCookie('number') == i.ticket ){
+				jQuery("#tickets tbody").append(
+						"<tr style='color:green'>"
+								+ "<td>"+ i.laneRu +"</td>"
+								+ "<td>"+ i.ticket +"</td>"
+								+ "<td>"+ i.waiting +"</td>"
+								+ "</tr>");
+			}else{
+				jQuery("#tickets tbody").append(
+						"<tr>"
+								+ "<td>"+ i.laneRu +"</td>"
+								+ "<td>"+ i.ticket +"</td>"
+								+ "<td>"+ i.waiting +"</td>"
+								+ "</tr>");
+			}
+		});
+	}
+}
+
+</script>
+</body>
+</html>

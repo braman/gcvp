@@ -1,0 +1,53 @@
+<div>
+        <label class="control-label" for="groups">Филиалы:</label>
+        <div class="controls">
+            <select id="groups" class="input-xlarge medium selectOne"></select>            
+        </div>
+        <button class="btn" onclick="goToFilial();">Перейти</button>    
+</div>
+
+<script>
+    var _ru = {};
+    
+    function _init(){
+        location.href = "#!adminWelcome";
+
+        jQuery('.error').hide();
+
+        onConnect();
+    }
+
+    function onConnect(){
+        var msg = {action:"toAdminWelcome"};
+        XmppClient.send("queue",JSON.stringify(msg));
+    }
+
+    function _onMessage(text){
+        console.log("_onMessage:"+text);
+        var msg = {};
+        try{
+            msg = JSON.parse(text); 
+        }catch(e){
+            console.warn("unit got non-JSON message:"+text);
+            return;
+        }
+        if(msg.groups){
+            _groups = msg.groups;
+            jQuery(_groups).each(function(ix){
+                var el = _groups[ix];
+                jQuery('#groups').append("<option value='"+el.name+"'>" + el.address + "</option>");
+            });           
+        }
+    }
+
+    function goToFilial() {
+    	group = jQuery('#groups').val();
+    	jQuery("#containerPanel").load("/admin.html",function(html){
+            if(typeof _init=="function"){
+                _init(group);
+            }
+            jQuery("#containerPanel").show();
+        });
+    }
+
+</script>

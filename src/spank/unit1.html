@@ -1,0 +1,958 @@
+<style>
+.toolbar a.active{
+background: black;
+} 
+</style>
+<nav class="top-bar">
+  <ul class="title-area">
+    
+    <!-- Название -->
+    <li class="name">
+      <h1><a href="#">CloudQueue</a></h1>
+    </li>
+    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+  </ul>
+
+  <section class="top-bar-section fixed contain-to-grid">
+  
+<ul class="right">
+      <li class="divider"></li>
+
+      <li><a id="help" href="#"></a>
+      </li>
+	  
+      <li class="divider"></li>
+
+      <li class="has-dropdown"><a href="#" id="username"></a>
+      		<ul class="dropdown">
+          		<li><a class="settings" onclick="getSettings()"></a></li>
+          		<li><a href="#!main" id="logoutLink"></a></li>
+        	</ul>
+	  </li>
+</ul>
+  </section>
+</nav>
+	<p id="info_text" style="text-align: center; height:20px"></p>
+	<p id="token_lane" style="text-align: center; height:20px"></p>
+	<div class="row">
+		<div class="large-12 columns">
+			<div class="count-player">
+				<h1 class="count digits row">000</h1>
+				<h3 class="timer" id="timer"><span id="minutes">00</span>:<span id="seconds">00</span></h3>
+			</div>
+		</div>
+				<div class="large-12 columns">
+					<ul class="toolbar" id="tooltip">
+					</ul>
+				</div>
+				
+<a href='#' id='anketaBtn' class='active' onclick='anketaBtn();'>anketa</a>
+
+<div class="statistics">
+    <table class="table table-condensed" style="margin: auto;">
+        <thead>
+            <th id="lane"></th>
+            <th id="totalwaiting"></th>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+			</div>
+
+<div class="reveal-modal" id="laneModal">
+    <div class="modal-header">
+        <a class="close-reveal-modal">&#215;</a>
+        <h3>Перенаправить</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <fieldset>
+            <h3>Список очередей</h3>
+            <div id="lanes">
+            </div>
+            
+            <br>
+            <h3>Список сотрудников</h3>
+            <div id="workers">
+            </div>
+            
+            <br>
+            <h3>Вариант помещения</h3>
+            <div id="radios" data-toggle="buttons-radio">
+                <input type="radio" name="radio" value="1" checked>С учетом ожидания по данной услуге<br>
+                <input type="radio" name="radio" value="2">Поместить в самое начало очереди<br>
+                <input type="radio" name="radio" value="3">Поместить в конец очереди<br>
+            </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left">
+           <a href="#" data-dismiss="modal" onclick='transferTest()' class="btn">Перенаправить</a>   
+           <a href="#" data-dismiss="modal" onclick='transferReturnTest()' class="btn" style="margin-left:30px;">Перенаправить с возвратом</a>
+        </div>        
+        <div class="pull-right">
+            <a href="#" class="btn" onclick="$('#laneModal').foundation('reveal','close');" data-dismiss="modal">Отмена</a>      
+        </div>         
+    </div>
+</div>
+
+<div class="reveal-modal" id="recallModal">
+    <div class="modal-header">
+        <a class="close-reveal-modal">&#215;</a>
+        <h3>Вызвать отложенного</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <div>
+                    <h3>Список клиентов</h3>
+                    <div id="recallClients" data-toggle="buttons-radio"></div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left">
+              <a href="#" data-dismiss="modal" onclick='recallClient()' class="btn">Вызвать</a>  
+        </div>
+        <div class="pull-right">
+        	<a href="#" class="btn" onclick="$('#recallModal').foundation('reveal','close');" data-dismiss="modal">Отмена</a>   
+        </div>
+    </div>
+</div>
+
+<div id="message" class="reveal-modal">
+  <div class="modal-header">
+    <a class="close-reveal-modal">&#215;</a>
+    <h3 class="settings"></h3>
+  </div>
+  <div id="messageBody" class="modal-body"></div>
+  <div class="modal-footer">
+  	<div class="pull-left">
+    	<a href="#" id="change_lang" class="btn" onclick="change_lang();" data-dismiss="modal">OK</a>
+  	</div>
+  </div>
+</div>
+
+<script>
+    var _ru = {
+        lane:"Услуга",
+        totalwaiting:"Всего ожидают",
+        served:"Вы обслужили",
+        call:"Вызвать_клиента",
+        recall:"Вызвать_отложенного",
+        start:"Начать_обслуживание",
+        end:"Завершить_обслуживание",
+        postpone:"Отложить",
+        transfer:"Перенаправить",
+        returnToQ:"Отклонить_клиента",
+        status:"Статус",
+        noclient:"Клиентов нет",
+        waiting:"Клиент ожидает",
+        called:"Клиент вызван",
+        started:"Обслуживание",
+        ended:"Обслуживание завершено",
+        transferred:"Клиент перенаправлен",
+        postponed:"Клиент отложен",
+        help: "Помощь",
+        settings: "Настройки",
+        quit: "Выход",
+        no_clients: "Нет клиентов",
+        declined: "Клиент отклонен",
+        choose_lang: "Выберите язык"
+    };
+
+    var _kk = {
+        lane:"Қызмет",
+        totalwaiting:"Күтушілер саны",
+        served:"Қызмет көрсетілгендер саны",
+        call:"Клиентті шақыру",
+        recall:"Тоқтатылған клиентті шақыру",
+        start:"Қызметті бастау",
+        end:"Қызметті аяқтау",
+        postpone:"Уақытша тоқтату",
+        transfer:"Бағыттау",
+        returnToQ:"Клиент келмеді",
+        status:"Жай-күйі",
+        noclient:"Клиенттер жоқ",
+        waiting:"Клиент күтуде",
+        called:"Клиент шақырылды",
+        started:"Қызмет көрсетілуде",
+        ended:"Қызмет көрсету аяқталды",
+        transferred:"Клиент бағытталды",
+        postponed:"Клиент уақытша тоқтатылды",
+        help: "Көмек",
+        settings: "Қондырғылар",
+        quit: "Шығу",
+        no_clients: "Клиенттер жоқ",
+        declined: "Клиент келмеді",
+        choose_lang: "Тіл таңдаңыз"
+    };
+    
+    var _en = {
+            lane:"Service",
+            totalwaiting:"Number of waitings",
+            served:"You have served",
+            call:"Call client",
+            recall:"Recall postponed client",
+            start:"Start service",
+            end:"End service",
+            postpone:"Postpone",
+            transfer:"Transfer",
+            returnToQ:"Decline a client",
+            status:"Status",
+            noclient:"No clients",
+            waiting:"Client is waiting",
+            called:"Client was called",
+            started:"Service started",
+            ended:"Service ended",
+            transferred:"Client transferred",
+            postponed:"Clients postponed",
+            help: "Help",
+            settings: "Settings",
+            quit: "Quit",
+            no_clients: "No clients",
+            declined: "Client was declined",
+            choose_lang: "Choose language"
+        };
+
+    var _token = null;
+    var _laneStats = null;
+    var _initData = null;
+    var _msgBuffer = new Array();
+    var _lanes = {};
+    var _lang = null;
+    var username = null;
+    var kk_ru = null;
+    var _callBtn = false;
+    var _recallBtn = false;
+    var _transferred = false;
+    var _recalled = false;
+    var _any_postponed = false;
+    var _count_recall = 0;
+  //timer
+	var minutesLabel = document.getElementById("minutes");
+    var secondsLabel = document.getElementById("seconds");
+    var totalSeconds = 0;
+    var stop = false;
+    
+    function _init(data){
+    	jQuery("head").empty ();
+        jQuery("head").append(jQuery("<meta charset='utf-8' /><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>CQ - Operator</title><link rel='stylesheet' href='stylesheets/normalize.css' /><link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'><link rel='stylesheet' href='stylesheets/app.css' /><link rel='stylesheet' href='stylesheets/unit.css' />"));
+        jQuery("#navBar").hide();
+        
+        XmppClient.send("queue","getUsername");
+           
+        _initData = data;
+        location.href = "#!unit";
+        jQuery(".buttonContainer .caret").css("margin-left","20px");
+        if(data.lang){
+        	_lang = data.lang;
+       
+        	var translated = "";
+        	console.log("Lang: " + _lang);
+        	
+        	if(_lang=="kk"){
+        		kk_ru = _kk;
+        	}
+        	else if(_lang=="ru"){
+        		kk_ru = _ru;
+        	}
+        	else if(_lang=="en"){
+        		kk_ru = _en
+        	}
+        	
+        	jQuery("#help").append(kk_ru.help);
+        	jQuery(".settings").append(kk_ru.settings);
+        	jQuery("#logoutLink").append(kk_ru.quit);
+        	jQuery("#lane").append(kk_ru.lane);
+        	jQuery("#totalwaiting").append(kk_ru.totalwaiting);
+        	jQuery("#tooltip").append(
+        			 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.returnToQ+"><a href='#' id='declineBtn' onclick='declineBtn();'><i class='icon-reply'></i></a></li>" +
+					 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.call+"><a href='#' id='callBtn' class='active' onclick='callBtn();'><i class='icon-bullhorn'></i></a></li>" +
+					 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.start+"><a href='#' id='startBtn'><i class='icon-play' onclick='startBtn();'></i></a></li>" +
+					 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.end+"><a href='#' id='endBtn'><i class='icon-stop' onclick='endBtn();'></i></a></li>" +
+					 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.postpone+"><a href='#' id='postponeBtn'><i class='icon-pause' onclick='postponeBtn();'></i></a></li>" +
+					 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.recall+"><a href='#' id='recallBtn'><i class='icon-bolt' onclick='recallBtn();'><p id='counter' style='font-size: 11px'></p></i></a></li>" +
+        			 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.transfer+"><a href='#' id='test'><i class='icon-share-alt' onclick='testBtn();'></i></a></li>");
+        }
+
+        if(data.username){
+        	jQuery("#username").text(data.username);
+        }
+        
+        if(data.lanes){
+            _lanes = data.lanes;
+            console.log ('111111111111111111111111111');
+            jQuery(_lanes).each(function(ix){
+                var el = _lanes[ix];
+                console.log (el);  
+            });
+            jQuery(_lanes).each(function(ix){
+                var el = _lanes[ix];
+                jQuery("#transferBtnGroup ul").append("<li><a href='#' onclick='transfer(\""+el.id+"\")'>"+el.ru+"</a></li>");  
+            });
+            var f=false;
+            jQuery(_lanes).each(function(ix){
+                var el = _lanes[ix];
+                if (!f){
+                    f = true;
+                    jQuery("#lanes").append("<input type='radio' name='lane' value='"+el.id+"' checked>"+el.ru+"<br>");    
+                }else{
+                  //  jQuery("#lanes").append("<button type='button' name='lane' class='btn' value="+ el.id +">" + el.ru + "</button>");
+                	jQuery("#lanes").append("<input type='radio' name='lane' value='"+el.id+"'>"+el.ru+"<br>"); 
+                }
+                                 
+            });
+        }
+        jQuery("#transferBtnGroup ul").append("<li class='divider'></li>");
+        if(data.units){
+            console.log ('111111111111111111111111111');
+            jQuery(data.units).each(function(ix){
+                var el = data.units[ix];
+                jQuery(data.lanes).each(function(ix){
+                    var el = _lanes[ix];
+                    console.log (el);  
+                });
+            });
+          //  jQuery("#workers").append("<button type='button' id='workers1' name='lane' class='btn active' value='0'>Любой сотрудник</button>");
+            jQuery("#workers").append("<input type='radio' name='worker' value='0' checked>Любой сотрудник<br>");    
+            jQuery(data.units).each(function(ix){
+                var el = data.units[ix];
+            //    jQuery("#workers").append("<button type='button' name='lane' class='btn' value="+ el.unit +">"+ el.name +"</button>"); 
+                jQuery("#workers").append("<input type='radio' name='worker' value='"+el.unit+"'>"+el.name+"<br>");    
+            });
+        }
+
+        if(data.postponed){
+        	_any_postponed = true;
+        	jQuery("#recallBtn").addClass("active");
+            jQuery(data.postponed).each(function(ix){
+            	_count_recall = _count_recall + 1;
+                var el = data.postponed[ix];
+               // jQuery("#recallClients").append("<li><a href='#' onclick='recall(\""+el.id+"\")'>"+el.ticket+" ("+el.time+")</a></li>");   
+           //     jQuery("#recallClients").append("<button type='button' id='workers1' name='lane' class='btn active' value='"+el.id+"'>"+el.ticket+"</button>");  
+                jQuery("#recallClients").append("<div id='"+el.ticket+"'><input type='radio'  name='client' value='"+el.id+"'>"+el.ticket+"\t"+el.lane_text+"<br/></div>");
+            });
+        }
+        jQuery("#counter").append(_count_recall);
+        
+        if(data.current){
+        	console.log("I am in DATA.CURRENT!!!");
+            _token = data.current;
+            console.log(_token);
+            jQuery(".digits").text(_token.ticket);
+
+            if(_token.started){
+            	jQuery("#startBtn").removeClass("active");
+           		jQuery("#declineBtn").removeClass("active");
+            	jQuery("#endBtn").addClass("active");
+           		jQuery("#postponeBtn").addClass("active");
+           		jQuery("#recallBtn").removeClass("active");
+           		jQuery("#test").addClass("active");
+           	}else if(_token.called){
+            	jQuery("#declineBtn").addClass("active");
+            	jQuery("#startBtn").addClass("active");
+            	jQuery("#recallBtn").removeClass("active");
+            	jQuery("#callBtn").removeClass("active");
+            }
+            jQuery("#token_lane").append(_token.laneText);
+        	jQuery("#info_text").empty();
+        	jQuery("#info_text").append(kk_ru.called);
+        	
+        	_callBtn = false;
+        	
+            jQuery(".tokenId").text("Token id (for debug):"+_token.id);
+        }
+        jQuery(".lanes .btn").click(function() {
+            console.log ('btn-group-vertical called');
+            $('#workers').empty();
+            var lane1 = $('#lanes .active').val ();
+            console.log (lane1);
+            console.log("WORKERS++++++++++++");
+            jQuery("#workers").append("<button type='button' id='workers1' name='worker' class='btn active' value='0'>Любой сотрудник</button>");
+            
+            jQuery(data.unit_lanes).each(function(ix){
+                var el = data.unit_lanes[ix];
+                if (el.lane == lane1){
+                    jQuery("#workers").append("<button type='button' name='worker' class='btn' value='"+ el.unit +"'>"+ el.name +"</button>");
+                } 
+            });
+        });
+        
+        XmppClient.send("queue",JSON.stringify({action:"statistics"}));
+    }
+
+	function getSettings(){
+		jQuery('#messageBody').html(
+				'<p>'+kk_ru.choose_lang+'</p>' +
+				'<label for="ru_lang"><input type="radio" id="ru_lang" name="lang" value="ru" />Русский</label>' +
+				'<label for="kk_lang"><input type="radio" id="kk_lang" name="lang" value="kk" />Казахский</label>' +
+				'<label for="en_lang"><input type="radio" id="en_lang" name="lang" value="en" />English</label>');
+		$('#message').foundation('reveal','open');
+	}
+    
+	function callBtn()
+	{
+		console.log('call btn clicked');
+        if(jQuery("#callBtn").hasClass("active")){
+        	jQuery("#callBtn").removeClass("active");
+        	_callBtn = true;
+        	_recalled = false;
+        	jQuery("#anketaBtn").addClass("active");
+            XmppClient.send("queue","call");
+        }else{
+            console.log("forbidden");
+        }
+	}
+
+	function anketaBtn()
+	{
+		
+        if(jQuery("#anketaBtn").hasClass("active")){
+        	console.log('anketa btn clicked');
+        	jQuery("#anketaBtn").removeClass("active");
+        	XmppClient.send("queue","anketa");
+        }else{
+            console.log("forbidden");
+        }
+	}
+	
+	function startBtn(){
+		if(!jQuery("#startBtn").hasClass("btn-inverse") && jQuery("#startBtn").hasClass("active")){
+        	jQuery("#info_text").empty();
+        	
+        	jQuery("#info_text").append(kk_ru.started); 
+        	console.log(_ru.called);
+       		jQuery("#startBtn").removeClass("active");
+       		jQuery("#declineBtn").removeClass("active");
+        	jQuery("#endBtn").addClass("active");
+       		jQuery("#postponeBtn").addClass("active");
+       		jQuery("#recallBtn").removeClass("active");
+       		jQuery("#test").addClass("active");
+        	stop = false;
+        	var token_id = $(".digits").text();
+        	$("#"+token_id).remove();
+        	setTime();
+            XmppClient.send("queue","start");
+        }else{
+            console.log("forbidden");
+        }
+	}
+	
+	function setTime()
+    {
+        ++totalSeconds;
+        secondsLabel.innerHTML = pad(totalSeconds%60);
+        minutesLabel.innerHTML = pad(parseInt(totalSeconds/60));
+        if(!stop){
+        	setTimeout(setTime, 1000);
+        }else{
+           	totalSeconds = 0;
+        }
+    }
+	
+	function pad(val)
+    {
+        var valString = val + "";
+        if(valString.length < 2)
+        {
+            return "0" + valString;
+        }
+        else
+        {
+            return valString;
+        }
+    }
+	
+	function endBtn(){
+		if(!jQuery("#endBtn").hasClass("btn-inverse") && jQuery("#endBtn").hasClass("active")){
+          	jQuery("#endBtn").removeClass("active");
+        	jQuery("#callBtn").addClass("active");
+        	jQuery("#postponeBtn").removeClass("active");
+        	jQuery("#test").removeClass("active");
+        	if(_any_postponed == true)
+        		jQuery("#recallBtn").addClass("active");
+        	
+        	stop = true;
+        	jQuery("#info_text").empty();
+        	jQuery("#info_text").append(kk_ru.ended);
+        	XmppClient.send("queue","end");
+        }else{
+            console.log("forbidden");
+        }
+	}
+	
+	function declineBtn(){
+		if(!jQuery("#declineBtn").hasClass("btn-inverse") && jQuery("#declineBtn").hasClass("active")){
+			jQuery("#token_lane").empty();
+        	jQuery("#token_lane").append(_token.laneText);
+            XmppClient.send("queue",JSON.stringify({action:"decline",token_id:_token.id}));
+        }else{
+            console.log("forbidden");
+        }
+	}
+	
+	function postponeBtn(){
+		if(!jQuery("#postponeBtn").hasClass("btn-inverse") && jQuery("#postponeBtn").hasClass("active")){
+        	jQuery("#postponeBtn").removeClass("active");
+        	jQuery("#endBtn").removeClass("active");
+        	jQuery("#test").removeClass("active");
+        	jQuery("#callBtn").addClass("active");
+        	if(_any_postponed == true)
+        		jQuery("#recallBtn").addClass("active");
+        	
+        	jQuery("#info_text").empty();
+        	
+        	jQuery("#info_text").append(kk_ru.postponed);
+            
+        	stop = true;
+        	XmppClient.send("queue","postpone");
+        }else{
+            console.log("forbidden");
+        }
+	}
+	
+	function recallBtn(){
+		if(jQuery("#recallBtn").hasClass("active")){
+			console.log("#recallBtn was clicked");
+			_recalled = true;
+    		$('#recallModal').foundation('reveal','open');
+		}
+        return false;   
+	}
+	
+	function testBtn(){
+		if(jQuery("#test").hasClass("active")){
+			console.log("#test wac clicked");
+        	$('#laneModal').foundation('reveal','open');
+		}
+        return false;  
+	}
+	
+	function change_lang(){
+		var inputs = document.getElementsByName("lang");
+        for (var i = 0; i < inputs.length; i++) {
+          if (inputs[i].checked) {
+            _lang = inputs[i].value;
+          }
+        }
+        
+        if(_lang=="kk"){
+    		kk_ru = _kk;
+    	}
+    	else if(_lang=="ru"){
+    		kk_ru = _ru;
+    	}
+    	else if(_lang=="en"){
+    		kk_ru = _en;
+    	}
+        jQuery("#help").empty();
+        jQuery('#help').append(kk_ru.help);
+        jQuery(".settings").empty();
+    	jQuery(".settings").append(kk_ru.settings);
+    	jQuery("#logoutLink").empty();
+    	jQuery("#logoutLink").append(kk_ru.quit);
+    	jQuery("#lane").empty();
+    	jQuery("#totalwaiting").empty();
+    	jQuery("#lane").append(kk_ru.lane);
+    	jQuery("#totalwaiting").append(kk_ru.totalwaiting);
+        jQuery('#tooltip').empty();
+        jQuery("#tooltip").append(
+   			 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.returnToQ+"><a href='#' id='declineBtn' onclick='declineBtn();'><i class='icon-reply'></i></a></li>" +
+				 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.call+"><a href='#' id='callBtn' class='active' onclick='callBtn();'><i class='icon-bullhorn'></i></a></li>" +
+				 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.start+"><a href='#' id='startBtn'><i class='icon-play' onclick='startBtn();'></i></a></li>" +
+				 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.end+"><a href='#' id='endBtn'><i class='icon-stop' onclick='endBtn();'></i></a></li>" +
+				 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.postpone+"><a href='#' id='postponeBtn'><i class='icon-pause' onclick='postponeBtn();'></i></a></li>" +
+				 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.recall+"><a href='#' id='recallBtn'><i class='icon-bolt' onclick='recallBtn();'></i></a></li>" +
+   			 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.transfer+"><a href='#' id='test'><i class='icon-share-alt' onclick='testBtn();'></i></a></li>");
+
+        jQuery(".statistics tbody").empty();
+        
+        jQuery(_laneStats).each(function(ix){
+            var el = _laneStats[ix];
+            var lane_text = null;
+            
+            if(_lang=="ru"){
+            	lane_text = getLane(el.lane).ru;
+            }else if(_lang=="kk"){
+            	lane_text = getLane(el.lane).kk;
+            }else if(_lang=="en"){
+            	lane_text = getLane(el.lane).en;
+        	}	
+        	jQuery(".statistics tbody").append("<tr data-lane='"+el.lane+"'><td>"+lane_text+"</td><td>"+el.waiting+"</td></tr>")
+        });
+        
+        console.log("LANGUAGE IS: " + _lang);
+        $('#message').foundation('reveal','close');
+		XmppClient.send("queue", JSON.stringify({action:"changeLang", user:sessionStorage.jid, language:_lang}));
+		//locale(_lang);
+	}
+    
+    function recall(tokenId){
+        XmppClient.send("queue",JSON.stringify({action:"recall",token:tokenId}));
+        return false;
+    }
+
+    function getLane(lane){
+        var result = null;
+        jQuery(_lanes).each(function(ix){
+            if(_lanes[ix].id==lane){
+                result = _lanes[ix];
+            }
+        });
+        return result;
+    }
+    var rButton = 1;
+    function transferTest(){  
+    	var lane1 = $("input:radio[name ='lane']:checked").val();
+        console.log ("Lane1: " + lane1);
+        var lane2 = $("input:radio[name ='worker']:checked").val();
+        console.log ("Lane2: " + lane2);
+
+        jQuery("#lanes .active").removeClass("active");
+        jQuery("#workers .active").removeClass("active");
+        jQuery("#btn-group-vertical1").addClass("active");
+        jQuery("#workers1").addClass("active");
+        rButton = $("input:radio[name ='radio']:checked").val();
+        //console.log (a);
+        
+        console.log("Token: "+_token);
+        if(_token.ticket!=null){
+        	_transferred = true;
+        	console.log("I am in _token");
+        	jQuery("#endBtn").removeClass("active");
+            jQuery("#postponeBtn").removeClass("active");
+            jQuery("#test").removeClass("active");
+            jQuery("#callBtn").addClass("active");
+            if(_any_postponed == true)
+        		jQuery("#recallBtn").addClass("active");
+        	
+            jQuery("#info_text").empty();
+            jQuery("#info_text").append(kk_ru.transferred);
+            stop = true;
+            
+            var token_id = $(".digits").text();
+        	$("#"+token_id).remove();
+            
+        	console.log("============Transferred: "+kk_ru.transferred);
+            if (lane2==0){
+                console.log (lane1);
+                transfer(null,lane1,false);   
+            }else{
+                console.log (lane2);
+                transfer(lane1,lane2,false);
+            }
+			
+        }
+        $('#laneModal').foundation('reveal','close');
+
+        jQuery("#info_text").empty();
+        jQuery("#info_text").append(_ru.transfered);
+        return false;
+    }
+    function transferReturnTest(){
+        rButton = $("input:radio[name ='radio']:checked").val();
+        //console.log (a);
+        var lane1 = $("input:radio[name ='lane']:checked").val();
+        console.log (lane1);
+        var lane2 =  $("input:radio[name ='worker']:checked").val();
+        console.log (lane2);
+        if(_token.ticket!=null){
+        	_transferred = true;
+        	console.log("I am in _token");
+        	jQuery("#endBtn").removeClass("active");
+            jQuery("#postponeBtn").removeClass("active");
+            jQuery("#test").removeClass("active");
+            jQuery("#callBtn").addClass("active");
+            if(_any_postponed == true)
+        		jQuery("#recallBtn").addClass("active");
+            
+            jQuery("#info_text").empty();
+            jQuery("#info_text").append(kk_ru.transferred);
+            stop = true;
+        	
+            var token_id = $(".digits").text();
+        	$("#"+token_id).remove();
+            
+            if (lane2==0){
+                console.log (lane1);
+                transfer(null,lane1,true);   
+            }else{
+                console.log (lane2);
+                transfer(lane1,lane2,true);
+            }
+        }
+        $('#laneModal').foundation('reveal','close');
+
+        return false;
+    }    
+    function transfer(transferredLane,target,rToken){
+        console.log(target);
+        console.log(_token.id);
+        console.log (rButton+" radioButton");
+        XmppClient.send("queue",JSON.stringify({action:"transfer",token:_token.id,laneName:transferredLane,destination:target,radioButton:rButton,returnToken:rToken}));
+        return false;
+    }
+
+    function toggleButtons(state){
+    	console.log('toogle btn clicked');
+        
+        jQuery(".buttonContainer .btn").attr("class","btn btn-primary btn-large");
+        if(state=="initial"){
+            jQuery("#endBtn,#startBtn,#transferBtn").attr("class","btn btn-inverse btn-large");
+        }else
+        if(state=="called"){
+            jQuery("#callBtn").addClass("btn-inverse").removeClass("btn-primary");
+        }else
+        if(state=="started"){
+            jQuery("#callBtn,#startBtn").addClass("btn-inverse").removeClass("btn-primary");
+        }else
+        if(state=="ended" || state=="transferred"){
+            toggleButtons("initial");
+        }
+    }
+
+    function _onMessage(text){
+        var msg = {};
+        try{
+            msg = JSON.parse(text); 
+        }catch(e){
+            console.warn("unit got non-JSON message:"+text);
+            return;
+        }
+        console.log(msg);
+        if(_laneStats){
+            processMessage(msg);
+        }
+        else{
+            if(msg.stats){
+                _laneStats = msg.stats;
+                jQuery(_laneStats).each(function(ix){
+                    var el = _laneStats[ix];
+                    var lane_text = null;
+                    
+                    if(_lang=="ru"){
+                    	lane_text = getLane(el.lane).ru;
+                	}else if(_lang=="kk"){
+                    	lane_text = getLane(el.lane).kk;
+                    }else if(_lang=="en"){
+                    	lane_text = getLane(el.lane).en;
+                	}	
+                	jQuery(".statistics tbody").append("<tr data-lane='"+el.lane+"'><td>"+lane_text+"</td><td>"+el.waiting+"</td></tr>")
+                });
+                jQuery(_msgBuffer).each(function(ix){
+                    processMessage(_msgBuffer[ix]);
+                });
+            }else{
+                _msgBuffer.push(msg);
+            }
+        }
+    }
+
+    function recallClient(){
+    	var client = $("input:radio[name ='client']:checked").val();
+        console.log("Client:" + client);
+        if(client!=null){
+        	recall(client);
+        	_recallBtn = true;
+        }
+       	  
+       	$('#laneModal').foundation('reveal','close');
+        return false;
+    }
+    
+    function processMessage(msg){
+        console.log("MSG.PUBSUB is " + msg.pubsub);
+        if(msg.pubsub){
+            console.log("I am in MSG.PUBSUB");
+            if(_recalled == false){
+            	if(msg.newticket){
+                	var counter = jQuery("tr[data-lane='"+msg.newticket.lane+"'] td:eq(1)");
+                	counter.text(parseInt(counter.text())+1);
+            	}else
+            	if(msg.called){
+                	var counter = jQuery("tr[data-lane='"+msg.lane+"'] td:eq(1)");
+                	counter.text(parseInt(counter.text())-1);
+            	}/*else
+            	if(msg.ended && msg.unit==sessionStorage.jid.split("@")[0]){
+                	var counter = jQuery("tr[data-lane='"+msg.lane+"'] td:eq(2)");
+                	counter.text(parseInt(counter.text())+1);
+            	}*/else
+            	if(msg.transferred){
+                	var counter = jQuery("tr[data-lane='"+msg.nextLane+"'] td:eq(1)");
+                	counter.text(parseInt(counter.text())+1);
+            	}
+            }
+        }else
+        if(msg.token){
+        	console.log("I am in MSG.TOKEN");
+        	 
+            _token = msg.token;
+           
+            jQuery(".digits").text(_token.ticket);
+            jQuery("#token_lane").empty();
+            jQuery("#token_lane").append(_token.laneText);
+            
+            jQuery(".tokenId").text("Token id (for debug):"+_token.id);
+            
+            if(_callBtn == true){
+            	jQuery("#declineBtn").addClass("active");
+            	jQuery("#startBtn").addClass("active");
+            	jQuery("#recallBtn").removeClass("active");
+            	
+            	jQuery("#info_text").empty();
+            	jQuery("#info_text").append(kk_ru.called);
+            	
+            	_callBtn = false;
+            }
+            else if(jQuery("#recallBtn").hasClass("active") && _recallBtn == true){
+            	_recallBtn = false;
+            	jQuery("#recallBtn").removeClass("active");
+            	jQuery("#callBtn").removeClass("active");
+            	jQuery("#declineBtn").addClass("active");
+            	jQuery("#startBtn").addClass("active");
+            	
+				_count_recall = _count_recall - 1;
+            	
+            	jQuery("#counter").empty();
+            	jQuery("#counter").append(_count_recall);
+            	
+				jQuery("#info_text").empty();
+            	jQuery("#info_text").append(kk_ru.called);
+            }
+            else if(_transferred == true){
+            	jQuery("#info_text").empty();
+                jQuery("#info_text").append(kk_ru.transferred);
+                _transferred = false;
+            }
+            
+          //  jQuery("#recallBtnGroup ul a[onclick='recall(\""+_token.id+"\")']").remove();
+            if(_token.status=="postponed"){
+            	_count_recall = _count_recall + 1;
+            	jQuery("#counter").empty();
+            	jQuery("#counter").append(_count_recall);
+            	_any_postponed = true;
+            	jQuery("#recallBtn").addClass("active");
+              //  jQuery("#recallBtnGroup ul").append("<li><a href='#' onclick='recall(\""+_token.id+"\")'>"+_token.ticket+" ("+new Date().toTimeString().split(" ")[0]+")</a></li>");
+           		jQuery("#recallClients").append("<div id='"+_token.ticket+"'><input type='radio' name='client' value='"+_token.id+"'>"+_token.ticket+"\t"+_token.laneText+"<br/></div>");
+            }else{
+            	if(jQuery("#recallClients").is(":empty")){
+            		_any_postponed = false;
+            		jQuery("#recallBtn").removeClass("active");
+            	}
+            	console.log("Checking if empty-------------------------");
+            }
+            
+        }else if(msg.firstname){
+        	console.log("I am in MSG.FIRSTNAME");
+        	username = msg.firstname;
+            jQuery("#username").text(username);
+            console.log("=================================Username: " + username);
+        }else{
+        	console.log("I am in ELSE");
+            _token = {};
+            _callBtn = false;
+            
+            if(jQuery("#declineBtn").hasClass("active")){
+            	jQuery("#declineBtn").removeClass("active");
+            	jQuery("#callBtn").addClass("active");
+            	if(_any_postponed == true)
+            		jQuery("#recallBtn").addClass("active");
+            	
+            	jQuery("#startBtn").removeClass("active");
+            	jQuery("#info_text").empty();
+            	jQuery("#info_text").append(kk_ru.declined);
+            }
+            else{
+            	jQuery(".digits").text("---");
+            	jQuery("#callBtn").addClass("active");
+            	jQuery("#token_lane").empty();
+            	jQuery("#token_lane").append("---");
+            	jQuery("#info_text").empty();
+            	jQuery("#info_text").append(kk_ru.no_clients);
+            }
+        }
+    }
+
+    function _onStatus(status){
+        if(status=="DISCONNECTED"){
+            console.error("Disconnected");
+        }
+    }
+
+    jQuery("#logoutLink").click(function(){
+    	console.log("logoutLink was clicked");
+    	window.location = "/";
+        sessionStorage.clear();
+        XmppClient.connection.disconnect();
+     //   jQuery("#loginPanel").show();
+     //   jQuery("#userPanel").hide();
+    });
+    
+    function bot(){
+        jQuery("#botBtn").addClass("btn-inverse").removeClass("btn-primary");
+        setTimeout(function(){
+            var r = parseInt(Math.random()*1000);
+            if(_token.tokenStatus=="CALLED"){
+                if(r>200){
+                    jQuery("#startBtn").click();
+                }else if(r<200){
+                    jQuery("#endBtn").click();
+                }else{
+                    jQuery("#returnBtn").click();//#declineBtn
+                }
+            }else
+            if(_token.tokenStatus=="STARTED"){
+                if(r>200){
+                    jQuery("#endBtn").click();
+                }else{
+                    jQuery("#returnBtn").click();//#declineBtn
+                }
+            }else{
+                jQuery("#callBtn").click();
+            }
+            setTimeout(function(){
+                bot();
+            },1000);
+        },2500);
+    }
+</script>
+
+    
+
+	<script src="javascripts/vendor/custom.modernizr.js"></script>
+  
+  	<script src="javascripts/foundation/foundation.js"></script>
+	
+	<script src="javascripts/foundation/foundation.alerts.js"></script>
+	
+	<script src="javascripts/foundation/foundation.clearing.js"></script>
+	
+	<script src="javascripts/foundation/foundation.cookie.js"></script>
+	
+	<script src="javascripts/foundation/foundation.dropdown.js"></script>
+	
+	<script src="javascripts/foundation/foundation.forms.js"></script>
+	
+	<script src="javascripts/foundation/foundation.joyride.js"></script>
+	
+	<script src="javascripts/foundation/foundation.magellan.js"></script>
+	
+	<script src="javascripts/foundation/foundation.orbit.js"></script>
+	
+	<script src="javascripts/foundation/foundation.placeholder.js"></script>
+	
+	<script src="javascripts/foundation/foundation.reveal.js"></script>
+	
+	<script src="javascripts/foundation/foundation.section.js"></script>
+	
+	<script src="javascripts/foundation/foundation.tooltips.js"></script>
+	
+	<script src="javascripts/foundation/foundation.topbar.js"></script>
+	
+  <script>
+    $(document).foundation();
+  </script>

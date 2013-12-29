@@ -1,0 +1,6 @@
+.rightside .ticket-number,.rightside .window-number,.rightside .icon-arrow-right {
+	  -webkit-animation: none;
+	  -moz-animation: none;
+	  -o-animation: none;
+	  animation: none;
+}

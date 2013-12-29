@@ -1,0 +1,72 @@
+    <div class='reveal-modal large' id='attention_modal'>
+      <h2 id='attention'>Внимание!</h2>
+      <p class='lead' id='lead'>
+        Вашего телефонного номера нету в системе. Проверьте правильно ли введен номер.
+        <a class='close-reveal-modal'>
+          &#215;
+        </a>
+      </p>
+    </div>
+    <div class='print-page' style="color:black; width:350px;" >
+     <center>
+        <img id='printLogo' src='images/logo/logo.gif' style='width: 70%;height:70%;margin-bottom: -10px;'>
+        <p id = 'ticketCode' style="margin:0 auto; font-size: 50px; margin-bottom: 0px;"></p>
+      </center>
+      <ul >
+        <li id='cli' >
+          <b id='clientIdMessage'></b>
+          <span id='clientId'></span>
+        </li>
+        <li style="line-height: 10%;">
+          <b style="margin-left: -120px;"  id='ticketCreateDateMessage'></b>
+          <span id='ticketCreateDate'></span>
+        </li>
+        <li style="line-height: 100%; margin-left:-91px; text-align: left;">         
+          <strong  id='laneTypesMessage'></strong>
+          <span  id='laneTypes'></span>
+        </li>
+      </ul>
+      <div style="line-height: 100%;" align='center'>
+        <b style="font-size: 15px; line-height: 80%;" id='waitingClientsPrintMessage'></b>
+      </div>
+    </div>
+    
+    <div class='containerKiosk'>
+      <div class='logo' id='Logo' style="margin: 0 auto;"></div>
+      <div class='controls'>
+        <div id='kiosk-step-1'>
+          <h5 class='title language-chooser-title'></h5>
+          <div class='kiosk'>
+            <a class='kiosk-link' href='#' id='kk-lang'>
+              <span>
+                Қазақша
+              </span>
+            </a>
+            <a class='kiosk-link' href='#' id='ru-lang'>
+              <span>
+                Русский
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div id='kiosk-step-3'>
+          <a href='#' id='back-to-step-1' onClick="clearActiveLanes();">
+            <div class='back ui-back'></div>
+          </a>
+          <a href='#' id='services-print'  onclick='printTicket();'>
+            <div class='ui-print' id='kiosk-print-services'></div>
+          </a>
+          <!-- /%h5.title Выберите вид услуги -->
+          <ul id='kiosk-services'>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  <!--[if lt IE 9]>
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+  <![endif]-->
+  <script src='javascripts/script.js'></script>
+  <script src='javascripts/kiosk.js'></script>      
+  

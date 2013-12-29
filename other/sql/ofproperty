@@ -1,0 +1,9 @@
+INSERT INTO ofproperty(name, propvalue) VALUES ('provider.auth.className','kz.bee.cloud.queue.auth.QueueAuthProvider');
+INSERT INTO ofproperty(name, propvalue) VALUES ('provider.user.className','kz.bee.cloud.queue.auth.QueueUserProvider');
+INSERT INTO ofproperty(name, propvalue) VALUES ('update.lastCheck','1340252433153');
+INSERT INTO ofproperty(name, propvalue) VALUES ('xmpp.auth.anonymous','true');
+INSERT INTO ofproperty(name, propvalue) VALUES ('xmpp.domain','cq.b2e.kz');
+INSERT INTO ofproperty(name, propvalue) VALUES ('xmpp.session.conflict-limit','0');
+INSERT INTO ofproperty(name, propvalue) VALUES ('xmpp.parser.buffer.size','1048576');//1 Mb default
+
+

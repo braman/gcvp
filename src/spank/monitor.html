@@ -1,0 +1,463 @@
+
+<script src="javascripts/foundation/foundation.js"></script>
+<script src="javascripts/foundation/foundation.datepicker.js"></script>
+
+<nav class="top-bar">
+	<ul class="title-area">
+
+		<!-- Название -->
+		<li class="name">
+			<h1>
+				<a href="#">CloudQueue</a>
+			</h1>
+		</li>
+		<!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+		<li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+	</ul>
+
+	<section class="top-bar-section fixed contain-to-grid">
+
+		<ul class="right">
+			<li class="divider"></li>
+
+			<li><a id="help" href="#"></a></li>
+
+			<li class="divider"></li>
+
+			<li class="has-dropdown"><a href="#" id="username"></a>
+				<ul class="dropdown">
+					<li><a class="settings" onclick="getSettings()"></a></li>
+					<li><a href="#!main" id="logoutLink"></a></li>
+				</ul></li>
+		</ul>
+	</section>
+</nav>
+
+<div class="row" style='max-width: 75em;'>
+	<div class="small-13 large-12 columns">
+		<a id="go_to_admin" href="#" class="button radius" onclick="goToAdmin();">Admin page</a>
+		<!--Section w Tabs-->
+		<div class="section-container tabs" data-section="tabs">
+
+			<section>
+				<!--Services-->
+				<p class="title" data-section-title>
+					<a class="lanes_label" href="#">Мониторинг по услугам</a>
+				</p>
+				<div class="content" id="lanes" data-section-content>
+					<a href="#" class="right" onclick="saveText();"><img
+						src='ico/download.ico' alt='excel' /></a>
+					<div class="scrollable" id="lane-mon">
+						<!--Table Begins-->
+						<table>
+							<thead>
+								<tr>
+									<th class="line" width="200"></th>
+									<th class="all"></th>
+									<th class="reserve"></th>
+									<th class="serviced"></th>
+									<th class="not_came"></th>
+									<th class="routed"></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<!--Table Ends-->
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<!--Operators-->
+				<p class="title" data-section-title>
+					<a id="units_title" href="#">Мониторинг по операторам</a>
+				</p>
+				<div class="content" id="units" data-section-content>
+					<a href="#" class="right" onclick="saveUnitText();"><img
+						src='ico/download.ico' alt='excel' /></a>
+					<div class="scrollable" id="unit-mon">
+						<!--Table Begins-->
+						<table>
+							<thead>
+								<tr>
+									<th class="operator"></th>
+									<th class="window"></th>
+									<th class="line"></th>
+									<th class="call_time"></th>
+									<th class="start_time"></th>
+									<th id="ticket_number"></th>
+									<th class="all"></th>
+									<th class="reserve"></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<!--Table Ends-->
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<!--Operators-->
+				<p class="title" data-section-title>
+					<a id="tickets_title" href="#">Статистика по Услугам</a>
+				</p>
+				<div class="content" data-section-content>
+					<a href="#" class="button" id="representDateLane"
+						onclick="showRepresentDate();"></a> <a href="#" class="right"
+						onclick="saveLaneStat();"><img src='ico/download.ico'
+						alt='excel' /></a>
+					<div class="scrollable" id="lane-stats">
+						<table>
+							<thead>
+								<tr>
+									<th width="200" class="line_title"></th>
+									<th class="all"></th>
+									<th class="reserve"></th>
+									<th class="serviced"></th>
+									<th class="not_came"></th>
+									<th class="routed"></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<!--Operators-->
+				<p class="title" data-section-title>
+					<a id="tickets_title" href="#">Статистика по операторам</a>
+				</p>
+				<div class="content" data-section-content>
+					<a href="#" class="button" id="representDateUnit"
+						onclick="showRepresentDate();"></a> <a href="#" class="right"
+						onclick="saveUnitStat();"><img src='ico/download.ico'
+						alt='excel' /></a>
+					<div class="scrollable" id="unit-stats">
+						<table>
+							<thead>
+								<tr>
+									<th class="operator_title"></th>
+									<th id="window"></th>
+									<th class="all"></th>
+									<th class="reserve"></th>
+									<th class="excell"></th>
+									<th class="good"></th>
+									<th class="norm"></th>
+									<th class="bad"></th>
+									<th class="veryBad"></th>
+									<th id="average_mark"></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<!--Operators-->
+				<p class="title" data-section-title>
+					<a id="tickets_title" href="#">Текущие билеты</a>
+				</p>
+				<div class="content" id="token-stats" data-section-content>
+					<a href="#" class="right" onclick="saveTicketText();"><img
+						src='ico/download.ico' alt='excel' /></a>
+					<table>
+						<thead>
+							<tr>
+								<th width="200" class="line_title"></th>
+								<th id="number"></th>
+								<th class="window"></th>
+								<th id="create_time"></th>
+								<th class="call_time"></th>
+								<th class="start_time"></th>
+								<th id="priority"></th>
+								<th id="waiting_time"></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+
+			<section>
+				<!--Operators-->
+				<p class="title" data-section-title>
+					<a id="mark_title" href="#">Оценка орератора</a>
+				</p>
+				<div class="content" id="marks" data-section-content>
+					<a href="#" class="right" onclick="saveMarkText();"><img
+						src='ico/download.ico' alt='excel' /></a>
+					<div class="scrollable" id="mark-stats">
+						<!--Table Begins-->
+						<table>
+							<thead>
+								<tr>
+									<th class="operator"></th>
+									<th class="excell"></th>
+									<th class="good"></th>
+									<th class="norm"></th>
+									<th class="bad"></th>
+									<th class="veryBad"></th>
+									<th id="average"></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<!--Table Ends-->
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</div>
+
+
+<div class="reveal-modal" id="unitModal">
+	<div class="modal-header">
+		<a class="close-reveal-modal">&#215;</a>
+		<h3 class="history"></h3>
+	</div>
+	<div class="modal-body">
+		<form class="form-horizontal">
+			<fieldset>
+				<legend style="margin-bottom: 13px;">
+					<div>
+						<span id="unitRealname"></span>
+					</div>
+
+					<div>
+						<span id="unitUsername"></span>
+					</div>
+				</legend>
+
+				<ul class='unitLanes'
+					style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
+				<table class="table table-striped table-condensed table-hover">
+					<thead>
+						<th class="line"></th>
+						<th class="ticket"></th>
+						<th class="start"></th>
+						<th class="end"></th>
+						<th class="mark"></th>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</fieldset>
+		</form>
+	</div>
+</div>
+
+<div class="reveal-modal" id="laneModal">
+	<div class="modal-header">
+		<a class="close-reveal-modal">&#215;</a>
+		<h3 id="history"></h3>
+	</div>
+	<div class="modal-body">
+		<form class="form-horizontal">
+			<fieldset>
+				<legend style="margin-bottom: 13px;">
+					<div>
+						<span id="laneName"></span>
+					</div>
+				</legend>
+
+
+				<ul class='unitLanes'
+					style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
+				<table class="table table-striped table-condensed table-hover">
+					<thead>
+						<th class="operator"></th>
+						<th class="ticket"></th>
+						<th class="start"></th>
+						<th class="end"></th>
+						<th class="mark"></th>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</fieldset>
+		</form>
+	</div>
+</div>
+
+
+<div class="reveal-modal" id="representDateModal">
+	<div class="modal-header">
+		<a class="close-reveal-modal">&#215;</a>
+		<h3>Перейти к дате</h3>
+	</div>
+	<div class="modal-body">
+		<form class="form-horizontal content">
+			<div class="control-group">
+				<label class="control-label" for="datepickerFrom">Дата от:</label>
+				<div class="controls">
+					<p>
+						<input type="text" class="span2" value="" id="datepickerFrom">
+					</p>
+					<label class="error" for="datepickerFrom" id="datepickerFrom_error"></label>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="datepickerTo">Дата до:</label>
+				<div class="controls">
+					<p>
+						<input type="text" class="span2" value="" id="datepickerTo">
+					</p>
+					<label class="error" for="datepickerTo" id="datepickerTo_error"></label>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" onclick="goToDate();">ОК</button>
+	</div>
+</div>
+
+
+<div class="reveal-modal" id="unitModal">
+	<div class="modal-header">
+		<a class="close-reveal-modal">&#215;</a>
+		<h3>История</h3>
+	</div>
+	<div class="modal-body">
+		<form class="form-horizontal">
+			<fieldset>
+				<legend style="margin-bottom: 13px;">
+					<div>
+						<span id="unitRealname"></span>
+					</div>
+
+					<div>
+						<span id="unitUsername"></span>
+					</div>
+				</legend>
+
+				<ul class='unitLanes'
+					style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
+				<table class="table table-striped table-condensed table-hover">
+					<thead>
+						<th class="line_title"></th>
+						<th>Билет</th>
+						<th>Начало</th>
+						<th>Конец</th>
+						<th>Оценка</th>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</fieldset>
+		</form>
+	</div>
+</div>
+
+<div class="reveal-modal" id="laneModal">
+	<div class="modal-header">
+		<a class="close-reveal-modal">&#215;</a>
+		<h3>История</h3>
+	</div>
+	<div class="modal-body">
+		<form class="form-horizontal">
+			<fieldset>
+				<legend style="margin-bottom: 13px;">
+					<div>
+						<span id="laneName"></span>
+					</div>
+				</legend>
+
+				<ul class='unitLanes'
+					style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
+				<table class="table table-striped table-condensed table-hover">
+					<thead>
+						<th class="operator_title"></th>
+						<th>Билет</th>
+						<th>Начало</th>
+						<th>Конец</th>
+						<th>Оценка</th>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</fieldset>
+		</form>
+	</div>
+</div>
+
+<div class="reveal-modal" id="tokenModal">
+	<div class="modal-header">
+		<a class="close-reveal-modal">&#215;</a>
+		<h3>Билет</h3>
+	</div>
+	<div class="modal-body">
+		<form class="form-horizontal">
+			<fieldset>
+				<label class="control-label question" for="priority">Priority</label>
+				<div class="control-group">
+					<div class="controls">
+						<input type="text" class="input-xlarge" id="priorityInput">
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a class="close" href="#"
+			onclick="$('#tokenModal').foundation('reveal', 'close');"></a> <a
+			href="#" class="btn btn-primary save" onclick="save();"></a>
+	</div>
+</div>
+
+<div id="message" class="reveal-modal">
+	<div class="modal-header">
+		<a class="close-reveal-modal">&#215;</a>
+		<h3 class="settings"></h3>
+	</div>
+	<div id="messageBody" class="modal-body"></div>
+	<div class="modal-footer">
+		<div class="pull-left">
+			<a href="#" id="change_lang" class="btn" onclick="change_lang();"
+				data-dismiss="modal">OK</a>
+		</div>
+	</div>
+</div>
+
+<link rel="stylesheet" href="stylesheets/foundation-datepicker.css">
+
+<script src="javascripts/vendor/custom.modernizr.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js"></script>
+
+
+<script src="javascripts/foundation/foundation.topbar.js"></script>
+<script src="javascripts/foundation/foundation.dropdown.js"></script>
+<script src="javascripts/foundation/foundation.reveal.js"></script>
+<script src="javascripts/foundation/foundation.section.js"></script>
+<script src="javascripts/foundation/foundation.tooltips.js"></script>
+
+<script src="javascripts/monitor.js">></script>
+<!-- 
+	  <script src="javascripts/ticket.js"></script> 
+	  <script src="javascripts/statistics.js"></script>
+  -->
+<script src="javascripts/FileSaver.min.js"></script>
+
+<script>
+    $(document).foundation();
+  </script>
+

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    This file stores bootstrap properties needed by Openfire.
+    Property names must be in the format: "prop.name.is.blah=value"
+    That will be stored as:
+        <prop>
+            <name>
+                <is>
+                    <blah>value</blah>
+                </is>
+            </name>
+        </prop>
+
+    Most properties are stored in the Openfire database. A
+    property viewer and editor is included in the admin console.
+-->
+<!-- root element, all properties must be under this element -->
+<jive> 
+  <adminConsole> 
+    <!-- Disable either port by setting the value to -1 -->  
+    <port>9090</port>  
+    <securePort>9091</securePort> 
+  </adminConsole>
+  <provider>
+    <auth>
+      <className>kz.bee.cloud.queue.auth.QueueAuthProvider</className>
+    </auth>
+    <user>
+      <className>kz.bee.cloud.queue.auth.QueueUserProvider</className>
+    </user>
+  </provider>
+    <!-- <jdbcProvider> 
+        <driver>org.postgresql.Driver</driver>  
+        <connectionString>jdbc:postgresql://127.0.0.1:5432/cq?user=postgres&amp;password=postgres</connectionString> 
+    </jdbcProvider>  
+    <provider> 
+        <auth>
+            <className>org.jivesoftware.openfire.auth.JDBCAuthProvider</className> 
+        </auth> 
+    </provider>  
+    <jdbcAuthProvider> 
+        <passwordSQL>select passwordhash_||'salt'||passwordsalt_ from wx_user WHERE name_=?</passwordSQL>  
+        <passwordType>custom</passwordType> 
+    </jdbcAuthProvider> -->
+  <locale>ru_RU</locale>  
+  <connectionProvider> 
+    <className>org.jivesoftware.database.DefaultConnectionProvider</className> 
+  </connectionProvider>  
+  <database> 
+    <defaultProvider> 
+      <driver>org.postgresql.Driver</driver>  
+      <serverURL>jdbc:postgresql://localhost:5432/cloud_queue</serverURL>  
+      <username>postgres</username>  
+      <password>postgres</password>  
+      <testSQL>select 1</testSQL>  
+      <testBeforeUse>true</testBeforeUse>  
+      <testAfterUse>true</testAfterUse>  
+      <minConnections>5</minConnections>  
+      <maxConnections>25</maxConnections>  
+      <connectionTimeout>1.0</connectionTimeout> 
+    </defaultProvider> 
+  </database>  
+  <setup>true</setup> 
+</jive>

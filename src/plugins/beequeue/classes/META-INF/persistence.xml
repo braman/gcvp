@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Persistence deployment descriptor for dev profile -->
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+
+	<persistence-unit name="cqPU" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		
+		<class>kz.bee.cloud.queue.model.User</class>
+		<class>kz.bee.cloud.queue.model.Unit</class>
+		<class>kz.bee.cloud.queue.model.MonitorUnit</class>
+		<class>kz.bee.cloud.queue.model.MonitorUnitDemo</class>
+		<class>kz.bee.cloud.queue.model.Dashboard</class>
+		<class>kz.bee.cloud.queue.model.Ticket</class>
+		<class>kz.bee.cloud.queue.model.Token</class>
+		<class>kz.bee.cloud.queue.model.Lane</class>
+		<class>kz.bee.cloud.queue.model.Properties</class>
+		<class>kz.bee.cloud.queue.model.Group</class>
+		<class>kz.bee.cloud.queue.model.AnketaAnswers</class>
+		<class>kz.bee.cloud.queue.model.AnketaQuestions</class>
+		<class>kz.bee.cloud.queue.model.BundleMessage</class>
+		<class>kz.bee.cloud.queue.model.Number</class>
+		<class>kz.bee.cloud.queue.reservation.Reservation</class>
+
+		<class>kz.bee.cloud.queue.model.Weekend</class>
+
+		<class>kz.bee.cloud.queue.anketa.AnketaUser</class>
+		
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="false" />
+			
+			<property name="hibernate.connection.provider_class" value="kz.bee.hibernate.connection.ConnectionProvider" />
+			
+			<!-- <property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />
+			<property name="hibernate.connection.url" value="jdbc:postgresql://localhost/cq" />
+			<property name="hibernate.connection.username" value="postgres" />
+			<property name="hibernate.connection.password" value="postgres" /> -->
+		</properties>
+	</persistence-unit>
+
+</persistence>

@@ -1,0 +1,379 @@
+<meta charset="utf-8">
+
+
+<style>
+@font-face { font-family:"OCRB"; src: url('Ocrb.ttf'), url('Ocrb.eot'); } 
+@font-face { font-family:"MyriadPro"; src: url('MyriadPro.ttf'); } 
+@font-face { font-family:"PhonepadTwo"; src: url('PhonepadTwo.ttf'); }
+
+@charset "utf-8";
+* {
+    margin: 0;
+}
+
+html, body {
+    background:#002a5a url(../_img/second_background.jpg) no-repeat;
+    /*background-size: 100% 1020px;*/
+    border: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Grande", Helvetica;
+    font-size:13px;
+}
+
+a {
+    color:#369;
+}
+
+img {
+    border-width: 0px;  
+}
+
+.clear {
+    clear:both;
+}
+
+
+ul  {
+    padding-left:20px;
+    list-style:square;
+    margin:10px 0;
+}
+
+h4 {
+    background-color:#f7f7f7;
+    padding:2px 5px ;
+    margin-bottom:10px;
+}
+
+input[type=text] {
+    color:#ccc;
+    outline:none;
+    border:none;
+    border-radius: 20px;
+    font:normal 50px "Lucida Grande", Helvetica;
+    letter-spacing:-1px;
+    cursor:pointer;
+    width:100%;
+    text-transform:uppercase;
+    padding:10px 30px;
+    box-sizing: border-box;
+    display:block;
+    box-shadow:0px 0px 12px rgba(0,0,0,0.7);
+    background-color:#000;
+    background-image:-webkit-gradient(linear, left bottom, left top, from(rgba(50,50,50,0.5)),to(rgba(0,0,0,0.8)));
+    -webkit-transition-property: background-color;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease;
+}
+
+input[type=text]::-webkit-input-placeholder {
+   color: #4ba25b;
+   font-size:45px;
+}
+
+input[type=text].typing {
+    background-color:#fff;
+}
+
+    
+ul {
+    padding:0;
+    margin:0;
+}
+
+.panel {
+    border-radius:20px;
+    padding:100px 60px 50px 60px;
+    box-shadow:1px 1px 15px rgba(50,50,50,0.5);
+
+    height: 100%;
+    
+    vertical-align: top;
+    background: url(_img/tson_logo.png) no-repeat 60px 40px #f2f2f2;    
+}
+
+h1 {
+    font-size:36px;
+    letter-spacing:-1pt;
+    margin:50px 0 20px 0;
+}
+
+#feedbackLabel{
+    color: white;
+    line-height: 70px;
+}
+
+h2 {
+    font-size:24px;
+    letter-spacing:-1pt;
+}
+
+h1 .subh1 {
+    letter-spacing:0pt;
+    font-size:18px;
+    color:#828282;
+    display:block;
+    font-weight:normal;
+    margin-top:-5px;
+}
+.button {
+    color:#8a8989;
+    text-shadow:1px 1px 1px white,-1px 0 1px #444;
+    border:none;
+    font:bold 24px "Lucida Grande", Helvetica;
+    letter-spacing:-1px;
+    cursor:pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-transform:uppercase;
+    text-overflow: ellipsis;
+    padding: 16px 10px 10px 16px;
+    box-shadow:0px 0px 12px rgba(0,0,0,0.3);
+    background-image:-webkit-gradient(linear, left bottom, left top, from(#b8b8b8),to(#fefefe));
+    border-radius: 6px;
+}
+.button:active, .button.active {
+    text-shadow:none;
+    background-image:-webkit-gradient(linear, left bottom, left top, from(#2e6226),to(#44df7e));
+    color:#d2ffdd;
+}
+
+.button:disabled {
+    text-shadow:1px 1px 1px white, -1px -1px 1px #999 !important;
+    background-image:-webkit-gradient(linear, left bottom, left top, from(#b8b8b8),to(#fefefe)) !important;
+    color:#dcdcdc;
+}
+.buttons {
+    background-image:-webkit-gradient(linear, left top, left bottom, from(#b8b8b8),to(#fff));
+    background-color:#f2f2f2;
+    background-clip:padding-box;
+    padding: 8px 8px 8px 8px;
+    border-radius:25px;
+}
+.buttons.vgroup .button {
+    display: block;
+}
+.buttons.vgroup .button:first-child {
+    border-top-left-radius:20px;
+    border-top-right-radius:20px;
+}
+.buttons.vgroup .button:last-child {
+    border-bottom-left-radius:20px;
+    border-bottom-right-radius:20px;
+}
+.buttons.hgroup .button {
+    display: inline-block;
+}
+.buttons.hgroup .button:first-child {
+    border-top-left-radius:20px;
+    border-bottom-left-radius:20px;
+}
+.buttons.hgroup .button:last-child {
+    border-top-right-radius:20px;
+    border-bottom-right-radius:20px;
+}
+
+
+/****************/
+.numpad row {
+    display:block;
+}
+
+.numpad row button {
+    width:33%;
+    display:inline-block;
+    min-width:40px !important;
+    padding:10px 10px !important;
+    box-shadow:0px 0px 10px rgba(0,0,0,0.3);
+    font:bold 46px "Lucida Grande", Helvetica;
+    margin-right:-2px;
+}
+
+.numpad row  button:first-child {
+    border-top-left-radius:20px;
+    border-bottom-left-radius:20px;
+}
+.numpad row  button:last-child {
+    border-top-right-radius:20px;
+    border-bottom-right-radius:20px;
+    margin-right:0px;
+}
+.numpad row button {
+    border-radius:10px;
+}
+.numpad row:last-child button {
+    margin-bottom:0px;
+}
+/****************/
+.scene-hide {
+    display:none;
+}
+.scene-show {
+    display:block;
+}
+
+.main {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: table;
+}
+
+/*.callcenter1414 {
+    background:url(../_img/icon_callcenter.png) no-repeat 5px 5px #fff;
+    height:123px;
+    border-top-left-radius:20px;
+    border-bottom-left-radius:20px;
+    box-shadow:1px 1px 15px rgba(50,50,50,0.5);
+}
+
+.queue {
+    height:125px;
+    border-top-left-radius:20px;
+    border-bottom-left-radius:20px;
+    box-shadow:1px 1px 15px rgba(50,50,50,0.5);
+    margin-top:40px;
+    background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(170,200,230,0.5)),to(rgba(0,0,0,0.3)));
+    text-align:center;
+    padding:25px;
+}
+
+.queue .num{
+    font:normal 70px OCRB;
+    color:#fff;
+    letter-spacing:-3px;
+    text-shadow:0px 0px 1px #fff;
+    line-height:60px;
+    background:url(../_img/queue_arrow.png) no-repeat 131px 7px;
+}
+
+.queue .num span:first-child {
+    margin-right:35px;
+}
+.queue .subnum span:first-child {
+    margin-right:50px;
+}
+
+.queue .subnum{
+    font:normal 14px Arial;
+    color: #ccc;
+    border-bottom:1px solid #758ca9;
+    padding-bottom:18px;
+    margin:5px auto 15px auto;
+}
+
+.queue .name{
+    font:normal 18px Arial;
+    color:#e9dfd0;
+    letter-spacing:-1px;
+    /*line-height:38px;*/
+    overflow:hidden;
+    text-transform:uppercase;
+}
+*/
+@-webkit-keyframes blink {
+    0%,50% {
+        opacity:1;
+    }
+    51%,100% {
+        opacity:0.1;
+    }
+}
+
+
+/*.weaccept {
+    background:url(../_img/icon_weaccept.png) no-repeat 20px 5px #f2f2f2;
+    height:131px;
+    border-top-left-radius:20px;
+    border-bottom-left-radius:20px;
+    box-shadow:1px 1px 15px rgba(50,50,50,0.5);
+    margin-top:40px;
+}
+
+.xmpp-status {
+    background:#f2f2f2;
+    height:50px;
+    border-top-left-radius:20px;
+    border-bottom-left-radius:20px;
+    box-shadow:1px 1px 15px rgba(50,50,50,0.5);
+    margin-top:40px;
+}
+*/
+
+.smile {
+    display:block;
+    height: 100px;
+    width: 130px;
+}
+.smile-normal {
+    background-position: -120px 25px;
+}
+
+.smile-negative {
+    background-position: 26px 25px;
+}
+.smile-positive {
+    background-position: -264px 25px;
+}
+.smile-title {
+    display: inline-block;
+    position: relative;
+    top: -60px;    
+}
+
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    padding:0;
+    background: none;
+}
+</style>
+
+
+<div id="smileOutput" align='center'>
+    <div>
+        <h1 id="feedbackLabel">Хотите пройти анкетирование?</h1>
+        <div class="buttons vgroup" style="width: 65%;">
+            <div class="button" onclick="anketa('yes');">
+                <div class="smile-back"><div class="smile smile-positive"></div></div>
+                <div class="smile-title" id="feedbackLabel5">Да</div>
+            </div>
+            <div class="button" onclick="anketa('no');">
+                <div class="smile-back"><div class="smile smile-positive"></div></div>
+                <div class="smile-title" id="feedbackLabel3">Нет</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function anketa(cond) {
+	if (cond == 'yes'){
+		jQuery('body').load("/secondMonitor/anketaList.html",function(html){
+            jQuery('#advertisementOutput').css("height", (window.outerHeight-62)+"px");
+            jQuery('#advertisementOutput').css("width", window.outerWidth+"px");
+            jQuery('#advertisementOutput').css("margin", "0 auto");
+        });
+	}else{
+		jQuery('body').load("/secondMonitor/advertisement.html",function(html){
+            jQuery('#advertisementOutput').css("height", (window.outerHeight-62)+"px");
+            jQuery('#advertisementOutput').css("width", window.outerWidth+"px");
+            jQuery('#advertisementOutput').css("margin", "0 auto");
+        });
+	}    
+}
+</script>

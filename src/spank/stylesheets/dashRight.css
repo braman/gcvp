@@ -1,0 +1,6 @@
+.rightside .ticket-number,.rightside .window-number,.rightside .icon-arrow-right {
+	  -webkit-animation: glow cubic-bezier(0.645, 0.045, 0.355, 1.000) 3 1.8s;
+	  -moz-animation: glow cubic-bezier(0.645, 0.045, 0.355, 1.000) 3 1.8s;
+	  -o-animation: glow cubic-bezier(0.645, 0.045, 0.355, 1.000) 3 1.8s;
+	  animation: glow cubic-bezier(0.645, 0.045, 0.355, 1.000) 3 1.8s;
+}

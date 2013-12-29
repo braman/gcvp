@@ -1,0 +1,107 @@
+<style>
+    body {
+        background:#202020 url(img/dashboard/pattern.gif);
+        overflow:hidden;
+        margin:0;
+        padding:0;
+    }
+    .body { 
+    	padding-top:30px;
+    }
+</style>
+
+<div id="flashPanel" class="hidden" style="height: 100%;">
+    <embed allowscriptaccess="always" src="../swf/dashboard.swf"
+        width="100%" height="100%"
+        flashvars="color=00ff00&amp;fmt=####&amp;animated=false"
+        id="dashboard" name="dashboard" type="application/x-shockwave-flash" />
+    <embed allowscriptaccess="always" src="../swf/speecher_multilang.swf"
+        width="0" height="0" id="announcer" name="announcer"
+        type="application/x-shockwave-flash" />
+    
+</div>
+
+<script>
+    var _kk = {};
+    var _ru = {};
+
+    var dashboard = null;
+    var announcer = null;
+
+    function _init(msg){
+    	
+        location.hash = "#!dashboard";
+        jQuery("#connectionStatus").text("");
+        document.title = 'CQ - Dashboard';        
+        $('#body').css('min-height','100%');
+        console.log('init---------------------------------------');
+        setTimeout(function(){
+            
+            jQuery("#navBar").hide();
+            dashboard = document.getElementById("dashboard");
+            announcer = document.getElementById("announcer");
+            jQuery("#flashPanel").removeClass("hidden");
+            //dashboard.setTitle(_group);
+            console.log ('-----------------------');
+            jQuery("title").text(msg.group);
+            if(msg.group){
+                dashboard.setTitle('Beeline');
+            }	
+            
+            if(msg.tokens){
+            	jQuery(msg.tokens).each(function(ix){
+                    var t = msg.tokens[ix];
+                    console.log (t);
+                        setTimeout(function(){
+                        	if(t.isTicketReserved==10){
+                            	if(t.color){
+                            		dashboard.push({ticket:[t.ticket,t.window],color:t.color,type:'remote'});
+                            	}else{
+                            		dashboard.push({ticket:[t.ticket,t.window],color:'00ff00',type:'remote'});
+                                }
+	                    	}else{
+		                    	if(t.color){
+		                    		dashboard.push({ticket:[t.ticket,t.window],color:t.color});
+		                    	}else{
+		                    		dashboard.push({ticket:[t.ticket,t.window],color:'00ff00'});
+			                   	}
+	                        	
+	                        }
+	                    },3000);
+	                });
+            }
+        },5000);
+    }
+
+    function _onMessage(text){
+        var msg = {};
+        try{
+            msg = JSON.parse(text);
+        }catch(e){
+            console.warn("Dashboard got non-JSON message:"+text);
+            return;
+        }
+        console.log(msg);
+        if(msg.ticket && (msg.called || msg.recalled)){
+//         	setTimeout(function(){
+//             	announcer.speech([msg.ticket,msg.window],msg.lang);
+//         	},1000);
+            if(msg.isTicketReserved){
+        		dashboard.push({ticket:[msg.ticket,msg.window],color:msg.color,type:'remote'}); 
+            }else{
+            	dashboard.push({ticket:[msg.ticket,msg.window],color:msg.color});
+            }
+        	
+            
+        }
+    }
+
+    function _onStatus(status){
+        console.log("_onStatus:"+ruStatuses[status]);
+        if(status=="DISCONNECTED"){
+            jQuery("#connectionStatus").text(ruStatuses[status]);
+            jQuery("#connectionStatus").css("color","red");
+        }
+    }
+</script>
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang='ru'>
+  <head>
+    <meta charset='utf8'>
+    <meta content='width=device-width' name='viewport'>
+    <link href='stylesheets/screen.css' media='screen, projection' rel='stylesheet'>
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu&subset=latin,cyrillic' type='text/css' rel='stylesheet'>    
+  </head>
+  <body>
+    <div class='container second-container'>
+      <div class='logo' id='kioskLogo'></div>
+      <div class='second-step-1'>
+        <h1 class='second-number'>
+          
+        </h1>
+      </div>
+      <div class='second-step-2'>
+        <div class='ad' id='ad'>
+          <img src="images/logo/gcvp.jpg">
+        </div>
+      </div>
+      <div class='second-step-3'>
+        <h5 id="opinion" class='title'>
+          
+        </h5>
+        <ul class='feedback'>
+          <li>
+            <a class='feedback-link great' href='#' id='feedback-great' onclick="smile(4);">
+              <span id="good"></span>
+            </a>
+          </li>
+          <li>
+            <a class='feedback-link ok' href='#' id='feedback-bad' onclick="smile(3);">
+              <span id="normal"></span>
+            </a>
+          </li>
+          <li>
+            <a class='feedback-link bad' href='#' id='feedback-bad' onclick="smile(1);">
+              <span id="very_bad"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class='second-step-4' id='anketa'>
+        <h1 id="anketa" class='title'>
+        </h1>
+      </div>
+      <div class='second-step-5'>
+        <h1 id="thanks_for_time" class='congratulations'>
+        </h1>
+      </div>
+      <div class='second-step-6'>
+        <h1 id="thanks" class='congratulations'>
+        </h1>
+      </div>
+      <div class='second-step-7' id="numbersDiv">
+        <ul id="numberUl"></ul>
+      </div>
+    </div>
+  </body>
+  <!--[if lt IE 9]>
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+  <![endif]-->
+  <script src='javascripts/2nd-script.js'></script>
+</html>
+

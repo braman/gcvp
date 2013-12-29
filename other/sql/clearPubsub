@@ -1,0 +1,4 @@
+delete from ofpubsubaffiliation;
+delete from ofpubsubitem;
+delete from ofpubsubnode;
+delete from ofpubsubsubscription;

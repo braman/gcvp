@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin>
+    <class>kz.bee.cloud.queue.openfire.plugin.QueuePlugin</class>
+    <name>Cloud Queue Plugin</name>
+    <description>Plugin for queue project</description>
+    <author>Bee Software</author>
+    <version>1.0.0</version>
+    <date>29/3/2012</date>
+    <minServerVersion>3.7.1</minServerVersion>
+</plugin>

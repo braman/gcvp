@@ -1,0 +1,103 @@
+<nav class="top-bar">
+	<ul class="title-area">
+
+		<!-- Название -->
+		<li class="name">
+			<h1>
+				<a href="#">CloudQueue</a>
+			</h1>
+		</li>
+		<!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+		<li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+	</ul>
+
+	<section class="top-bar-section fixed contain-to-grid">
+
+		<ul class="right">
+			<li class="divider"></li>
+
+			<li><a id="help" href="#"></a></li>
+
+			<li class="divider"></li>
+
+			<li class="has-dropdown"><a href="#" id="username"></a>
+				<ul class="dropdown">
+					<li><a class="settings" onclick="getSettings()"></a></li>
+					<li><a href="#!main" id="logoutLink"></a></li>
+				</ul></li>
+		</ul>
+	</section>
+</nav>
+
+<div class="row">
+	<div class="small-12 large-12 columns">
+		<div>
+			<h2 id="ticket_title"></h2>
+		</div>
+		<div class="panel">
+			<a href="#" id="monitoring_title" class="button"
+				onclick="goToMonitoring();"></a>
+		</div>
+		<div class="panel">
+			<label id="lanes" for="customDropdown1" class="mb-big"></label> <select
+				id="customDropdown1" class="large">
+			</select>
+		</div>
+
+		<div class="panel">
+			<a href="#" class="right" onclick="saveTicketText();"><img
+				src='ico/download.ico' alt='excel' /></a>
+			<div class="scrollable" id="token-stats">
+				<table>
+					<thead>
+						<tr>
+							<th width="200" class="line_title"></th>
+							<th id="number"></th>
+							<th id="window"></th>
+							<th id="create_time"></th>
+							<th id="call_time"></th>
+							<th id="start_time"></th>
+							<th id="priority"></th>
+							<th id="waiting_time"></th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="reveal-modal" id="tokenModal">
+	<div class="modal-header">
+		<a class="close-reveal-modal">&#215;</a>
+		<h3>Билет</h3>
+	</div>
+	<div class="modal-body">
+		<form class="form-horizontal">
+			<fieldset>
+				<label class="control-label question" for="priority">Priority</label>
+				<div class="control-group">
+					<div class="controls">
+						<input type="text" class="input-xlarge" id="priorityInput">
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a class="close" href="#"
+			onclick="$('#tokenModal').foundation('reveal', 'close');"></a> <a
+			href="#" class="btn btn-primary save" onclick="save();"></a>
+	</div>
+</div>
+
+<script src="javascripts/ticket.js"></script>
+<script src="javascripts/vendor/custom.modernizr.js"></script>
+
+
+<script>
+    $(document).foundation();
+  </script>
+<script src="javascripts/FileSaver.min.js"></script>
