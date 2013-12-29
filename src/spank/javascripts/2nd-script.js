@@ -231,7 +231,7 @@ function myVideo(){
 	second_step_1.fadeOut();
 	$('#ok_button').fadeOut();
 	$('.second-step-7').fadeOut();
-	$('#ad').html("<img src='images/logo/gcvp.jpg'>");
+	$('#ad').html("<img src='images/logo/gcvp.jpg' style='width:100%'>");
 	console.log('myVideo');
 	second_step_2.add(second_footer).fadeIn();
 	console.log('myVideoFinished');
@@ -405,7 +405,7 @@ function toVideo() {
 	second_step_6.fadeOut();
 	$('.second-step-7').fadeOut();
 	$('#ok_button').fadeOut();
-	$('#ad').html("<img src='images/logo/gcvp.jpg'>");
+	$('#ad').html("<img src='images/logo/gcvp.jpg' style='width:100%'>");
 	second_step_2.add(second_footer).fadeIn();
 }
 

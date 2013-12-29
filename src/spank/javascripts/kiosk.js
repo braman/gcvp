@@ -291,7 +291,7 @@ var iinFake,
           console.log('head_---------------------------------------');
           jQuery("head").empty();
           document.title = 'Киоск CloudQueue';
-          jQuery("head").append(jQuery("<meta charset='utf8'><meta content='width=device-width' name='viewport'><link href='stylesheets/screen.css' media='print,screen' rel='stylesheet'><link href='http://fonts.googleapis.com/css?family=Ubuntu&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>"));
+          jQuery("head").append(jQuery("<meta charset='utf8'><meta content='width=device-width' name='viewport'><link href='stylesheets/screen.css' media='print,screen' rel='stylesheet'><link href='stylesheets/kiosk.css' media='print,screen' rel='stylesheet'><link href='http://fonts.googleapis.com/css?family=Ubuntu&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>"));
       }
 
       function getLane(lane) {
@@ -319,54 +319,12 @@ var iinFake,
             		  $("#no").click();
             		  console.log('no');
             	  },5000);
-            	  if(t>70000){
-            		  if(t>90000){
-            			  setTimeout(function(){
-                    		  $("#a").click();
-                    		  console.log('a')
-                    	  },7500); 
-            		  }else if(t>80000){
-            			  setTimeout(function(){
-                    		  $("#b").click();
-                    		  console.log('b')
-                    	  },7500); 
-            		  }else if(t>70000){
-            			  setTimeout(function(){
-                    		  $("#g").click();
-                    		  console.log('g')
-                    	  },7500); 
-            		  }
-            	  }else if(t>60000){
-            		  if(t>66000){
-            			  setTimeout(function(){
-            				  $("#a").click();
-            				  $("#b").click();
-            				  console.log('ab')
-                    	  },7500); 
-            		  }else if(t>63000){
-            			  setTimeout(function(){
-                    		  $("#b").click();
-                    		  $("#q").click();
-                    		  console.log('bg')
-                    	  },7500); 
-            		  }else if(t>60000){
-            			  setTimeout(function(){
-                    		  $("#g").click();
-                    		  $("#a").click();
-                    		  console.log('ga')
-                    	  },7500); 
-            			 
-            		  }
-            	  }else{
-            		  setTimeout(function(){
-            			  $("#a").click();
-        				  $("#b").click();
-        				  $("#g").click();
-        				  console.log('abg')
-                	  },7500); 
-            	  } 
+    			  setTimeout(function(){
+            		  $("#fils01a02").click();
+            		  console.log('a')
+            	  },7500); 
             	  setTimeout(function(){
-            		  $("#kiosk-print-services").click();
+            		  $("#fils01a02").click();
             		  console.log('kiosk-print-services')
             	  },10000); 
               }else {
@@ -379,56 +337,14 @@ var iinFake,
             		  $("#no").click();
             		  console.log('no');
             	  },5000);
-            	  if(t>70000){
-            		  if(t>90000){
-            			  setTimeout(function(){
-                    		  $("#a").click();
-                    		  console.log('a')
-                    	  },7500); 
-            		  }else if(t>80000){
-            			  setTimeout(function(){
-                    		  $("#b").click();
-                    		  console.log('b')
-                    	  },7500); 
-            		  }else if(t>70000){
-            			  setTimeout(function(){
-                    		  $("#g").click();
-                    		  console.log('g')
-                    	  },7500); 
-            		  }
-            	  }else if(t>60000){
-            		  if(t>66000){
-            			  setTimeout(function(){
-            				  $("#a").click();
-            				  $("#b").click();
-            				  console.log('ab')
-                    	  },7500); 
-            		  }else if(t>63000){
-            			  setTimeout(function(){
-                    		  $("#b").click();
-                    		  $("#q").click();
-                    		  console.log('bg')
-                    	  },7500); 
-            		  }else if(t>60000){
-            			  setTimeout(function(){
-                    		  $("#g").click();
-                    		  $("#a").click();
-                    		  console.log('ga')
-                    	  },7500); 
-            			 
-            		  }
-            	  }else{
-            		  setTimeout(function(){
-            			  $("#a").click();
-        				  $("#b").click();
-        				  $("#g").click();
-        				  console.log('abg')
-                	  },7500); 
-            	  } 
             	  setTimeout(function(){
-            		  $("#kiosk-print-services").click();
+            		  $("#fils01a02").click();
+            		  console.log('a')
+            	  },7500); 
+            	  setTimeout(function(){
+            		  $("#fils01a02").click();
             		  console.log('kiosk-print-services')
-            	  },10000); 
+            	  },10000);  
               }
           },15000);
       }

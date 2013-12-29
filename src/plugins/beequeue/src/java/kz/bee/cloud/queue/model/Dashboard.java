@@ -96,6 +96,7 @@ public class Dashboard extends User {
 			LeafNode node = (LeafNode) XMPPServer.getInstance().getPubSubModule().getNode(getGroup().getName()+".dashboard.pubsub");
 //			QLog.info(node);
 			if(node == null){
+				System.out.println(getGroup().getName()+".dashboard.pubsub"+"----------------------------");
 				node = new LeafNode(XMPPServer.getInstance().getPubSubModule(), pNode, getGroup().getName()+".dashboard.pubsub",Constants.QUEUE);
 				node.addPublisher(Constants.QUEUE);
 				node.saveToDB();

@@ -56,35 +56,6 @@ var _ru = {
 		mark: "Оценка",
 		choose_lang: "Выберите язык"
 };
-var _en = {
-		help: "Help",
-		settings: "Settings",
-		quit: "Quit",
-		monitoring: "Monitoring",
-		go_to_statistics: "Go to Statistics",
-		go_to_tickets: "Current tickets",
-		line: "Line",
-		all: "All",
-		reserve: "Reserve",
-		serviced: "Services",
-		notcame: "Client has not come",
-		routed: "Routed",
-		operator: "Operator",
-		window: "Window",
-		call_time: "Time of call",
-		start_time: "Time of start",
-		ticket_number: "Number of ticket",
-		excellent: "Excellent",
-		good: "Good",
-		bad: "Bad",
-		average: "Average mark",
-		history: "History",
-		ticket: "Ticket",
-		start: "Start",
-		end: "End",
-		mark: "Mark",
-		choose_lang: "Choose language"
-};
 
 var _unitStats = {};
 // var _unitStatistics = {};
@@ -112,9 +83,6 @@ if(data.lang){
 	}
 	else if(_lang=="ru"){
 		kk_ru = _ru;
-	}
-	else if(_lang=="en"){
-		kk_ru = _en;
 	}
 	
 	jQuery("#help").append(kk_ru.help);
@@ -170,7 +138,7 @@ function _initFromStatistics(lang){
 			kk_ru = _ru;
 		}
 		else if(_lang=="en"){
-			kk_ru = _en;
+			kk_ru = _ru;
 		}
 		
 		jQuery("#help").append(kk_ru.help);
@@ -565,8 +533,9 @@ jQuery('#unitModal legend div span#unitRealname').text('Оператор: ' + el
 jQuery('#unitModal legend div span#unitUsername').text("Логин: " + el.username);
 
 jQuery("#unitModal ul.unitLanes").empty();
+
 jQuery(el.lanes).each(function(ixx){
-jQuery("#unitModal ul.unitLanes").append("<li><span class='label'>"+el.lanes[ixx].laneText+"</span></li>");
+	jQuery("#unitModal ul.unitLanes").append("<li><span class='label'>"+el.lanes[ixx].laneText+"</span></li>");
 });
 
 jQuery("#unitModal tbody").empty();
@@ -643,8 +612,7 @@ function getSettings(){
 	jQuery('#messageBody').html(
 			'<p>'+kk_ru.choose_lang+'</p>' +
 			'<label for="ru_lang"><input type="radio" id="ru_lang" name="lang" value="ru" />Русский</label>' +
-			'<label for="kk_lang"><input type="radio" id="kk_lang" name="lang" value="kk" />Казахский</label>' +
-			'<label for="en_lang"><input type="radio" id="en_lang" name="lang" value="en" />English</label>');
+			'<label for="kk_lang"><input type="radio" id="kk_lang" name="lang" value="kk" />Казахский</label>');
 	$('#message').foundation('reveal','open');
  //   jQuery('#dropdown_menu').hide();
 }
@@ -664,7 +632,7 @@ function change_lang(){
 		kk_ru = _ru;
 	}
 	else if(_lang=="en"){
-		kk_ru = _en
+		kk_ru = _ru;
 	}
    
     jQuery("#help").empty();

@@ -1,5 +1,6 @@
 var $rightside = $('.rightside'), $leftside = $('.leftside'), $leftside_list = $leftside
-		.children('.list'), $rightside_list = $rightside.children('.list'), $marquee = $('.marquee'), $ticketNumber = 101, $windowNumber = 9, $ticketId = 0;
+		.children('.list'), $rightside_list = $rightside.children('.list'), 
+		$ticketNumber = 101, $windowNumber = 9, $ticketId = 0;
 
 var rightTicket = new Array();
 var rightWindow = new Array();
@@ -9,19 +10,6 @@ var leftTicket = new Array();
 var leftWindow = new Array();
 var leftId = new Array();
 var leftColor = new Array();
-
-$marquee.marquee({
-	// 13 секунд :)
-	speed : 13000,
-	// отступ в пикселях от каждого элемента
-	gap : 50,
-	// без задержки
-	delayBeforeStart : 0,
-	// направление влево
-	direction : 'left',
-	// дублируем ли строку или нет
-	duplicated : false
-});
 
 $addingItem = function(ticketNumber, windowNumber, ticketId) {
 	return '<li><span id = "'
@@ -99,12 +87,12 @@ function draw() {
 	if (leftTicket.length > 0) {
 		$leftside_list.empty();
 		$rightside_list.empty();
-
-		if (leftSide & rightSide) {
+		console.log(leftTicket.length);
+		if (leftSide && rightSide) {
 			$leftside_list.append($(
 					$addingItem(leftTicket[0], leftWindow[0], leftId[0]))
 					.hide().fadeIn('slow'));
-
+			
 			for ( var i = 1; i < leftTicket.length; i++) {
 				$leftside_list.append($addingItem(leftTicket[i], leftWindow[i],
 						leftId[i]));
@@ -133,6 +121,13 @@ function draw() {
 				$('#' + leftId[i]).css('color', '#' + leftColor[i]);
 			}
 		}
+		sessionStorage.setItem('leftTicket',leftTicket);
+		sessionStorage.setItem('leftWindow',leftWindow);
+		sessionStorage.setItem('leftId',leftId);
+		
+		sessionStorage.setItem('rightTicket',rightTicket);
+		sessionStorage.setItem('rightWindow',rightWindow);
+		sessionStorage.setItem('rightId',rightId);
 	}
 }
 function PlaySound() {
@@ -325,6 +320,7 @@ function _onMessage(text) {
 			$('#line').text(msg.runningLine);
 		}
 	}
+	console.log('sulta'+msg);
 	if (msg.ticket && (msg.called || msg.recalled)) {
 		console.log(window + " " + ticket);
 		// if(msg.window == unitWindow && msg.ticket == ticket){

@@ -115,9 +115,9 @@ public class QueuePlugin implements Plugin {
 	
 	public static void insertInitialData(String path) throws QueuePluginException{
 		final String spank = path.replace("plugins/beequeue", "resources/spank");
-		new Work<Object>() {
-			@Override
-			protected Object work(EntityManager em) throws QueuePluginException {
+		EntityManager em = DBManager.newEm();
+		em.getTransaction().begin();
+		
 				Group main = new Group("main");
 				em.persist(main);
 				
@@ -317,12 +317,13 @@ public class QueuePlugin implements Plugin {
 				dashs.add(4);
 				dashs.add(3);
 				dashs.add(3);
-				
+				em.getTransaction().commit();
 				for(int j=0;j<fils.size();j++){
 					Set<Lane> laneAll = new HashSet<Lane>();
 					int start = 1;
 					int end = 999/as1.length;
 					for(int i=1;i<=as1.length;i++){
+						em.getTransaction().begin();
 						Lane l1 = new Lane();
 						l1.setGroup(fils.get(j));
 						if((j+1)<10){
@@ -363,10 +364,12 @@ public class QueuePlugin implements Plugin {
 						messageK.setLang(Language.KK);
 						messageK.setValue(as2[i-1]);
 						em.persist(messageK);
-						start = end;
-						end = end+1;
+						start = end+1;
+						end = end+999/as1.length;
 						laneAll.add(l1);
+						em.getTransaction().commit();
 					}
+					em.getTransaction().begin();
 					User gcvpKiosk1 = new User();
 					gcvpKiosk1.setRole(Role.KIOSK);
 					gcvpKiosk1.setGroup(fils.get(j));
@@ -378,6 +381,8 @@ public class QueuePlugin implements Plugin {
 						
 					}
 					em.persist(gcvpKiosk1);
+					em.getTransaction().commit();
+					em.getTransaction().begin();
 					User monitor = new User();
 					monitor.setRole(Role.MONITOR);
 					monitor.setGroup(fils.get(j));
@@ -389,7 +394,9 @@ public class QueuePlugin implements Plugin {
 						
 					}
 					em.persist(monitor);
+					em.getTransaction().commit();
 					for(int i=1;i<=operators.get(j);i++){
+						em.getTransaction().begin();
 						MonitorUnit mu1 = new MonitorUnit();
 						int s = j+1;
 						if(s<10){
@@ -406,7 +413,8 @@ public class QueuePlugin implements Plugin {
 							
 						}
 						em.persist(mu1);
-						
+						em.getTransaction().commit();
+						em.getTransaction().begin();
 						Unit gcvpunit1 = new Unit();
 						if(s<10){
 							gcvpunit1.setUsername("unit0"+(j+1)+""+i);
@@ -429,7 +437,9 @@ public class QueuePlugin implements Plugin {
 							
 						}
 						em.persist(gcvpunit1);
-					}	
+						em.getTransaction().commit();
+					}
+					em.getTransaction().begin();
 					for(int i=1;i<=dashs.get(i);i++){
 						int s = j+1;
 						Dashboard beelineDash = new Dashboard();
@@ -439,7 +449,6 @@ public class QueuePlugin implements Plugin {
 							beelineDash.setUsername("dash"+(j+1)+""+i);
 						}
 						beelineDash.setGroup(fils.get(j));
-						System.out.println(laneAll.size());
 						beelineDash.setDashboardLanes(laneAll);
 						try {
 							beelineDash.setPasswordSalt(HashUtils.getSaltString());
@@ -449,9 +458,10 @@ public class QueuePlugin implements Plugin {
 						}
 						em.persist(beelineDash);
 					}
+					em.getTransaction().commit();
 				}
+				em.getTransaction().begin();
 				
-			
 				
 				try{
 					File kioskFile = new File(spank+"/kiosk.html");
@@ -501,9 +511,7 @@ public class QueuePlugin implements Plugin {
 				}catch(Exception e){
 					e.printStackTrace();
 				}
-				return null;
-			}
-		}.workInTransaction();
+				em.getTransaction().commit();
 	}
 	
 	public static void insertMessages() throws QueuePluginException{
