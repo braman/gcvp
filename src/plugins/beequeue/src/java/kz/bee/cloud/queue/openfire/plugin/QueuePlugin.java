@@ -55,7 +55,7 @@ public class QueuePlugin implements Plugin {
 		
 		QLog.info("Bee Q plugin initialize begin");
 		/*******************DEBUG start*******************/
-		boolean debug = true;
+		boolean debug = false;
 		if(debug){
 			Map<String,String> map = new HashMap<String,String>();
 //			map.put("hibernate.show_sql", "true");

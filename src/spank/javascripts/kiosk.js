@@ -11,19 +11,6 @@ var _ru = {
 	waitingClientsPrintMessage:'Количество клиентов перед Вами: ',
 	no: 'Нет'
 };
-var _en = {
-	reservation_title: 'Did you reserve the ticket?',
-	yes: 'Yes',
-	kiosk_backspace: 'Clear',
-	attention: 'Attention!',
-	lead:'Your telephone number is not present in the system. Check the number.',
-//	kiosk_iin_input:'Write your IIN',
-	kiosk_iin_input:'Write telephone number',
-	ticketCreateDateMessage:'Time ',
-	laneTypesMessage:'Services ',
-	waitingClientsPrintMessage:'Number of clients before you: ',	
-	no: 'No'
-	};
 var _kk = {
 	reservation_title: 'Бронь арқылы ма?',
 	yes: 'Иә',
@@ -125,8 +112,8 @@ var iinFake,
     		kk_ru = _kk;
     	}else if(_lang=="ru-lang"){
     		kk_ru = _ru;
-    	}else if(_lang=="en-lang"){
-    		kk_ru = _en
+    	}else {
+    		kk_ru = _ru;
     	}
         $('#reservation_title').text(kk_ru.reservation_title);
         $('#yes').text(kk_ru.yes);

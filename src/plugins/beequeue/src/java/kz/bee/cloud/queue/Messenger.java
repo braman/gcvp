@@ -986,9 +986,9 @@ public class Messenger {
 						Token tokenSmile = em.find(Token.class, tokenId);
 
 						int mark = 3;
-						if (condition.equals("bad"))
+						if (condition.equals("1"))
 							mark = 1;
-						else if (condition.equals("good"))
+						else if (condition.equals("5"))
 							mark = 5;
 
 						tokenSmile.setMark(mark);
