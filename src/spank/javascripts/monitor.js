@@ -77,43 +77,7 @@ var _ru = {
 	mark : "Оценка",
 	choose_lang : "Выберите язык"
 };
-var _en = {
-	help : "Help",
-	settings : "Settings",
-	quit : "Quit",
-	monitoring : "Monitoring",
-	go_to_statistics : "Go to Statistics",
-	go_to_tickets : "Current tickets",
-	line : "Line",
-	all : "All",
-	reserve : "Reserve",
-	serviced : "Services",
-	notcame : "Client has not come",
-	routed : "Routed",
-	operator : "Operator",
-	window : "Window",
-	waiting_time : 'Время ожидания',
-	create_time : "Время распечатки",
-	call_time : "Time of call",
-	priority : "Приоритет",
-	close : "Close",
-	start_time : "Time of start",
-	ticket_number : "Number of ticket",
-	excellent : "Excellent",
-	good : "Good",
-	bad : "Bad",
-	norm : "Norm",
-	save : "Save",
-	veryBad : "Very bad",
 
-	average : "Average mark",
-	history : "History",
-	ticket : "Ticket",
-	start : "Start",
-	end : "End",
-	mark : "Mark",
-	choose_lang : "Choose language"
-};
 
 var _unitStats = {};
 // var _unitStatistics = {};
@@ -204,11 +168,8 @@ function _initFromLocalAdmin(lang){
 		if(_lang=="kk"){
 			kk_ru = _kk;
 		}
-		else if(_lang=="ru"){
+		else{
 			kk_ru = _ru;
-		}
-		else if(_lang=="en"){
-			kk_ru = _en;
 		}
 		
 		jQuery("#help").append(kk_ru.help);
@@ -434,13 +395,11 @@ function _onMessage(text) {
 		var token = jQuery("tr[data-unit='" + msg.tokenId + "']");
 		token.find("td[data-type=priority]").text(msg.priority);
 	} else if (_lang) {
-		if (_lang == "ru") {
-			kk_ru = _ru;
-		} else if (_lang == "kk") {
+		if (_lang == "kk") {
 			kk_ru = _kk;
-		} else if (_lang == "en") {
-			kk_ru = _en;
-		}
+		}else{
+			kk_ru = _ru;
+		} 
 
 		jQuery(".settings").empty();
 		jQuery("#help").empty();

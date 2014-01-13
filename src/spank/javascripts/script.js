@@ -13,7 +13,7 @@
 	    if (i % 3 === 0) {
 	      i = 0;
 	    }
-	  }, 3000);
+	  }, 5000);
   });
   var step1 = $("#kiosk-step-1"),
     step3 = $("#kiosk-step-3"),

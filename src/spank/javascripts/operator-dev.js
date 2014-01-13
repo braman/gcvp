@@ -8,7 +8,8 @@
         end:"Завершить_обслуживание",
         postpone:"Отложить",
         transfer:"Перенаправить",
-        returnToQ:"Отклонить_клиента",
+        exitFromQ:"Отклонить клиента",
+        returnToQ:"Вернуть в очередь клиента",
         status:"Статус",
         noclient:"Клиентов нет",
         waiting:"Клиент ожидает",
@@ -54,38 +55,10 @@
         backError: "Завершите обслуживание",
         no_clients: "Клиенттер жоқ",
         declined: "Клиент келмеді",
-        
+        exitFromQ:"Клиент келмеді",
         choose_lang: "Тіл таңдаңыз"
     };
     
-    var _en = {
-            lane:"Service",
-            totalwaiting:"Number of waitings",
-            served:"You have served",
-            call:"Call client",
-            recall:"Recall postponed client",
-            start:"Start service",
-            end:"End service",
-            postpone:"Postpone",
-            transfer:"Transfer",
-            returnToQ:"Decline a client",
-            status:"Status",
-            noclient:"No clients",
-            waiting:"Client is waiting",
-            called:"Client was called",
-            started:"Service started",
-            ended:"Service ended",
-            transferred:"Client transferred",
-            postponed:"Clients postponed",
-            help: "Help",
-            settings: "Settings",
-            quit: "Quit",
-            back: "Клиент возвращен",
-            backError: "Завершите обслуживание",
-            no_clients: "No clients",
-            declined: "Client was declined",
-            choose_lang: "Choose language"
-        };
     var firstTime = 0;
     var step = '';
     var _token = null;
@@ -117,7 +90,7 @@
     
     function _init(data){
     	jQuery("head").empty ();
-        //jQuery("head").append(jQuery("css' /><link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'><link rel='stylesheet' href='stylesheets/app.css' /><link rel='stylesheet' href='stylesheets/unit.css' />"));
+        jQuery("head").append("<link href='stylesheets/screen.css' media='screen, projection' rel='stylesheet'>");
     	document.title = 'Оператор CloudQueue';
         XmppClient.send("queue","getUsername");
            
@@ -133,11 +106,8 @@
         	if(_lang=="kk"){
         		kk_ru = _kk;
         	}
-        	else if(_lang=="ru"){
+        	else{
         		kk_ru = _ru;
-        	}
-        	else if(_lang=="en"){
-        		kk_ru = _en
         	}
         	
         	jQuery("#help").append(kk_ru.help);
@@ -145,14 +115,15 @@
         	jQuery("#logoutLink").append(kk_ru.quit);
         	jQuery("#lane").append(kk_ru.lane);
         	jQuery("#totalwaiting").append(kk_ru.totalwaiting);
-        	jQuery("#tooltip").append(
-        			 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.returnToQ+"><a href='#' id='declineBtn' onclick='declineBtn();'><i class='icon-reply'></i></a></li>" +
-					 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.call+"><a href='#' id='callBtn' class='active' onclick='callBtn();'><i class='icon-bullhorn'></i></a></li>" +
-					 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.start+"><a href='#' id='startBtn'><i class='icon-play' onclick='startBtn();'></i></a></li>" +
-					 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.end+"><a href='#' id='endBtn'><i class='icon-stop' onclick='endBtn();'></i></a></li>" +
-					 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.postpone+"><a href='#' id='postponeBtn'><i class='icon-pause' onclick='postponeBtn();'></i></a></li>" +
-					 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.recall+"><a href='#' id='recallBtn'><i class='icon-bolt' onclick='recallBtn();'><p id='counter' style='font-size: 11px'></p></i></a></li>" +
-        			 "<li data-tooltip class='has-tip tip-bottom' title="+kk_ru.transfer+"><a href='#' id='test'><i class='icon-share-alt' onclick='testBtn();'></i></a></li>");
+        	
+        	jQuery("#putinqueue").attr('title',kk_ru.returnToQ);
+        	jQuery("#postpone").attr('title',kk_ru.postpone);
+        	jQuery("#call").attr('title',kk_ru.call);
+        	jQuery("#stop").attr('title',kk_ru.end);
+        	jQuery("#start").attr('title',kk_ru.start);
+        	jQuery("#forward").attr('title',kk_ru.transfer);
+        	jQuery("#callpostponed").attr('title',kk_ru.recall);
+        	jQuery("#operator-back-to-step-1").attr('title',kk_ru.exitFromQ);
         }
 
         if(data.username){
@@ -274,40 +245,6 @@
 				'<label for="en_lang"><input type="radio" id="en_lang" name="lang" value="en" />English</label>');
 		$('#message').foundation('reveal','open');
 	}
-    function bot(){
-        _bot = true;
-        setInterval(function(){
-        	setTimeout(function(){
-        		if(step == ''){
-        			callBtn();
-            	}
-        		console.log('ru-lang');
-        	},2500);
-        	
-        	setTimeout(function(){
-        		if(step == 'called'){
-        			startBtn();
-        			step = 'started';
-        		}
-        		console.log('ru-lang');
-        	},7500);
-        	var t = parseInt(Math.random()*100000);
-        	if(t>50000){
-        		setTimeout(function(){
-            		anketaBtn();
-            		console.log('ru-lang');
-            	},10000);
-            }
-        	setTimeout(function(){
-        		if(step == 'started'){
-        			endBtn();
-            		step = '';
-        		}
-        		console.log('ru-lang');
-        	},17500);        
-        },20000);
-    }
-    
 	function callBtn()
 	{
 		console.log('call btn clicked');
@@ -319,13 +256,6 @@
     	}        
     }
 
-	function anketaBtn()
-	{
-		alertify.log("Анкета показана клиенту")
-    	console.log('anketa btn clicked');
-    	XmppClient.send("queue","anketa");
-    }
-	
 	function showNumbersBtn(){
 		alertify.log("Номера показаны клиенту");
     	console.log('showNumbers btn clicked');
@@ -632,11 +562,8 @@
         if(_lang=="kk"){
     		kk_ru = _kk;
     	}
-    	else if(_lang=="ru"){
+    	else{
     		kk_ru = _ru;
-    	}
-    	else if(_lang=="en"){
-    		kk_ru = _en;
     	}
         
         jQuery(_laneStats).each(function(ix){

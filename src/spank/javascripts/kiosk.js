@@ -1,51 +1,75 @@
+  var language_choose_title = $(".language-chooser-title"),
+    reminders = ["Тілді таңдаңыз", "Выберите язык"],
+    i = 0;
+  var _interval = null;
+  var laneGroup = false;
+  $(document).ready(function() {
+	  console.log('document ready');
+	  _interval = setInterval(function() {
+	    i++;
+	    language_choose_title.fadeOut(function() {
+	      $(this).text(reminders[(i % 2)]);
+	    }).fadeIn();
+	    if (i % 2 === 0) {
+	      i = 0;
+	    }
+	  }, 3000);
+  });
+  var step1 = $("#kiosk-step-1"),
+    step3 = $("#kiosk-step-3"),
+    services = $("#services"),
+    kiosk_services = $("#kiosk-services a"),
+    print_iin = $("#kiosk-print-iin"),
+    backtostep1 = $("#back-to-step-1");
+    
+  backtostep1.on('click', function(){
+	if(!laneGroup){
+   	  if(_data.tree){
+		laneGroup = true;
+	  }
+	  $lanes.empty();
+	  step3.fadeOut(300, function(){
+		  	mainMenu();
+			step1.fadeIn(300);
+		});	
+	}else{
+		step3.fadeOut(300, function(){
+			step1.fadeIn(300);
+		});	
+	}
+  });
+
+
+  String.prototype.replaceAt=function(index, character) {
+      return this.substr(0, index) + character + this.substr(index+character.length);
+   }
+  
+
 var _ru = {
-	reservation_title: 'Бронировали ли вы очередь?',
-	yes: 'Да',
-	kiosk_backspace: 'Удалить',
-	attention: 'Внимание!',
-	lead:'Вашего телефонного номера нету в системе. Проверьте правильно ли введен номер.',
-//	kiosk_iin_input:'Введите ваш ИИН',
-	kiosk_iin_input:'Введите номер телефона',
 	ticketCreateDateMessage:'Время:',
-	laneTypesMessage:'Услуги:',
-	waitingClientsPrintMessage:'Количество клиентов перед Вами: ',
-	no: 'Нет'
+	laneTypesMessage:'Услуга:',
+	waitingClientsPrintMessage:'Количество клиентов перед Вами: '
 };
 var _kk = {
-	reservation_title: 'Бронь арқылы ма?',
-	yes: 'Иә',
-	kiosk_backspace: 'Жою',
-	attention: 'Назар аударыңыз!',
-	lead:'Сіздің телефон нөміріңіз базадан табылмады. Нөмеріңіздің нақты дұрыс екенін тексеріңіз',
-//	kiosk_iin_input:'ЖСН енгізіңіз',
-	kiosk_iin_input:'Телефон нөмірін енгізіңіз',
 	ticketCreateDateMessage:'Уақыт',
-	laneTypesMessage:'Қызметтер',
-	waitingClientsPrintMessage:'Сіздің алдыңыздағы клиент саны: ',
-	no: 'Жоқ'
-	};
-var _bot = false;
-var iinFake,
-
-      iin = null,
-        lanes = "",
-        $lanes = $("#kiosk-services"),
-
-        _lanes = null,
-        _reservations = new Array(),
-        _laneTree = null,
-        _group = {},
-        _lang = null,
-        _data = null;
-		var firstTime = 0;
+	laneTypesMessage:'Қызмет',
+	waitingClientsPrintMessage:'Сіздің алдыңыздағы клиент саны: '
+};
+lanes = "",
+$lanes = $("#kiosk-services"),
+_lanes = null,
+_laneTree = null,
+_group = {},
+_lang = null,
+_data = null;
+var firstTime = 0;
 	      
-      function toggleLaneType(laneTypeName){
+     function toggleLaneType(laneTypeName){
         kiosk_services = $("#kiosk-services a");
     	IDlaneTypeName = $("#"+laneTypeName);
     		  
 	    var $this = IDlaneTypeName;
         $this.toggleClass('active');
-
         
         $this.find('.tick-pic, figure').fadeToggle(99);
 	    if(lanes.indexOf(laneTypeName+";") >= 0){
@@ -53,22 +77,8 @@ var iinFake,
         } else {
             lanes += laneTypeName+";";
         }
-	    clearLanes();
-        var splittedLanes = lanes.split(";");
+	    var splittedLanes = lanes.split(";");
         var counter = 0;
-        /*
-        jQuery(splittedLanes).each(function(index){
-            counter++;     
-           	jQuery("#laneNumber" + splittedLanes[index]).text(counter);
-            jQuery("#laneNumber" + splittedLanes[index]).show();
-        });
-        console.log(counter);
-        if(counter==1){
-            print_services.fadeOut();
-        }else{
-            print_services.fadeIn();
-        }
-        */
         printTicket();
     }
 
@@ -103,11 +113,9 @@ var iinFake,
         	});
         }
         setTimeout(function() {
-          $("#kiosk-step-2").hide();
-          $("#kiosk-step-3").hide();
-          $("#kiosk-step-iin").hide();
-          $("#kiosk-step-1").show();
+        	location.reload();
         }, 120000);
+        
         if(_lang=="kk-lang"){
     		kk_ru = _kk;
     	}else if(_lang=="ru-lang"){
@@ -115,16 +123,6 @@ var iinFake,
     	}else {
     		kk_ru = _ru;
     	}
-        $('#reservation_title').text(kk_ru.reservation_title);
-        $('#yes').text(kk_ru.yes);
-        $('#no').text(kk_ru.no);
-        $('#kiosk-backspace').text(kk_ru.kiosk_backspace);
-        $('#attention').text(kk_ru.attention);
-        $('#lead').text(kk_ru.lead);
-//        $('#kiosk-iin-input')[0].placeholder='+7(7__) ___-____';
-        var str = '7(7__) ___-____';
-        $('#kiosk-iin-input').html(str);
-//        $('#kiosk-iin-input').inputmask({ "mask": "+7(799) 999-9999"});
       }
       
 	  
@@ -203,48 +201,13 @@ var iinFake,
       }
 
       
-      
-      function cleariin(){
-    	  print_iin.fadeOut();
-    	  $('#kiosk-iin-input').empty();
-          var str = '7(7__) ___-____';
-    	  $('#kiosk-iin-input').html(str);
-      }
-      
       function clearAll(){
-    	  clearLanes();
-    	  cleariin();
-    	  clearActiveLanes();
-      }
-      function clearActiveLanes(){
-    	  print_services.fadeOut();
     	  lanes = "";
-    	  jQuery(_lanes).each(function(index){
-    		    jQuery("#"+_lanes[index].id).removeClass("active");
-    	        jQuery("#"+_lanes[index].id).find('.tick-pic, figure').hide();
-    	  });
-    	  clearLanes();
-      }
-      function clearLanes(){
-    	  jQuery(_lanes).each(function(index){
-    		  jQuery("#laneNumber" + _lanes[index].id).empty();  
-    		  jQuery("#laneNumber" + _lanes[index].id).hide();   
-    	  });
       }
       
       function _init(data) {
     	  console.log('init');
     	_data = data;
-
-
-        /* it needs if logo exists
-        if (data.logo) {
-          $('#kioskLogo').attr('src', data.logo);
-        }
-        if (data.ticketLogo) {
-          $('#printLogo').attr('src', data.ticketLogo); //'http://localhost:7070/img/kiosk/tson_logo.png')
-        }
-        */
         if (data.lanes) {
           _lanes = data.lanes;
           console.log(_lanes);
@@ -252,11 +215,7 @@ var iinFake,
         if (data.group) {
           _group = data.group;
         }
-        if (data.reservations) {
-          _reservations = data.reservations;
-        }
-        iinFake = $("#kiosk-iin-input");
-
+        
         $("#kk-lang").click(function() {
         	_initFromLang(data, 'kk-lang');
             step1.fadeOut(300, function() {
@@ -269,16 +228,10 @@ var iinFake,
                 step3.fadeIn(300);
               });
             });
-          $("#en-lang").click(function() {
-        	  _initFromLang(data, 'en-lang');
-              step1.fadeOut(300, function() {
-                step3.fadeIn(300);
-              });
-          });
           console.log('head_---------------------------------------');
           jQuery("head").empty();
-          document.title = 'Киоск CloudQueue';
-          jQuery("head").append(jQuery("<meta charset='utf8'><meta content='width=device-width' name='viewport'><link href='stylesheets/screen.css' media='print,screen' rel='stylesheet'><link href='stylesheets/kiosk.css' media='print,screen' rel='stylesheet'><link href='http://fonts.googleapis.com/css?family=Ubuntu&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>"));
+          document.title = 'Киоск ГЦВП';
+          jQuery("head").append(jQuery("<meta charset='utf8'><meta content='width=device-width' name='viewport'>"));
       }
 
       function getLane(lane) {
@@ -292,50 +245,7 @@ var iinFake,
         return result;
       }
       
-      function bot(){
-          _bot = true;
-          setInterval(function(){
-              var t = parseInt(Math.random()*100000);
-              if(t>50000){
-            	  setTimeout(function(){
-            		  $("#ru-lang").click();
-            		  console.log('ru-lang');
-            	  },2500);
-            	  
-            	  setTimeout(function(){
-            		  $("#no").click();
-            		  console.log('no');
-            	  },5000);
-    			  setTimeout(function(){
-            		  $("#fils01a02").click();
-            		  console.log('a')
-            	  },7500); 
-            	  setTimeout(function(){
-            		  $("#fils01a02").click();
-            		  console.log('kiosk-print-services')
-            	  },10000); 
-              }else {
-            	  setTimeout(function(){
-            		  $("#kk-lang").click();
-            		  console.log('ru-lang');
-            	  },2500);
-            	  
-            	  setTimeout(function(){
-            		  $("#no").click();
-            		  console.log('no');
-            	  },5000);
-            	  setTimeout(function(){
-            		  $("#fils01a02").click();
-            		  console.log('a')
-            	  },7500); 
-            	  setTimeout(function(){
-            		  $("#fils01a02").click();
-            		  console.log('kiosk-print-services')
-            	  },10000);  
-              }
-          },15000);
-      }
-      
+            
       function _onMessage(text) {
         console.log("_onMessage:" + text);
         var msg = {};
@@ -348,18 +258,6 @@ var iinFake,
         console.log(msg);
         if (msg.ticket) {
           jQuery("#ticketCode").text(msg.ticket.code);
-          var clientId = msg.ticket.clientIin;
-          if (clientId.length == '') {
-            clientId = "000000000000";
-          }
-          if(clientId!='000000000000'){
-        	  $("#clientIdMessage").text("ID:");
-              $("#clientId").text(clientId);
-              $('#cli').show();
-          }else{
-        	  $('#cli').hide();
-          }
-
           $("#ticketCreateDateMessage").text(kk_ru.ticketCreateDateMessage);
           var date = new Date();
           $("#ticketCreateDate").text(date.toJSON().split("T")[0] + " " + date.toTimeString().split(" ")[0]);
@@ -370,32 +268,13 @@ var iinFake,
           $(msg.ticket.lanes).each(function(ix) {
             if (msg.ticket.lanes[ix].length > 0) {
               var el = msg.ticket.lanes[ix]
-
-              var waitingClients = 0;
-              for (var prop in _lanes) {
-                lane = _lanes[prop];
-
-                if (lane.id == getLane(el).id) {
-                  if (msg.ticket.isReserved) waitingClients = lane.reserved - 1;
-                  else waitingClients = lane.count + lane.reserved - 1;
-                }
-              }
-              if(_lang=='en-lang'){
-            	  a += getLane(el).en + " (" + waitingClients +")" + ", ";
-              }else if(_lang=='kk-lang'){
-            	  a += getLane(el).kk + " (" + waitingClients +")" + ", ";
+              if(_lang=='kk-lang'){
+            	  a += getLane(el).kk;
               }else{
-            	  a += getLane(el).ru + " (" + waitingClients +")" + ", ";
+            	  a += getLane(el).ru;
               }
-              //a += getLane(el).ru + " (" + waitingClients;
-              //a += "<img src='img/rsz_usestrs.png' width='15px' height='15px'/>";
-              //a += ")" + ", "
             }
           });
-          //a = a.substr(0, a.length - 2);
-          //$("#laneTypes").append(a);
-          
-          a = a.substr(0,a.length-2);
           console.log(a);
           $("#laneTypes").text(a+'');
           var waitingClients = 0;
@@ -406,34 +285,15 @@ var iinFake,
             $(_lanes).each(function(jx) {
               var el = _lanes[jx];
               if (el.id == b) {
-                console.log(el.count + ' / ' + el.reserved);
-                if (msg.ticket.isReserved) {
-                  waitingClients = waitingClients + el.reserved - 1;
-
-                  var index = -1;
-                  for (var prop in _reservations) {
-                    var reservation = _reservations[prop];
-
-                    if (reservation.id == msg.ticket.clientIin && msg.ticket.clientIin != undefined) {
-                      index = prop;
-                      break;
-                    }
-                  }
-                  if (index != -1) _reservations.splice(index, 1);
-                } else waitingClients = waitingClients + el.count + el.reserved - 1;
+                waitingClients = waitingClients + el.count - 1;
               }
             });
           });
 
           $("#waitingClientsPrintMessage").text(kk_ru.waitingClientsPrintMessage + waitingClients);
           
-          if(_bot == false){
-        	  console.log('window');
-        	  window.print();
-          } 
-          console.log('BOT'+ _bot);
-          $("#kiosk-step-2").hide();
-          $("#kiosk-step-iin").hide();
+          window.print();
+          
           $("#kiosk-step-3").hide();
           setTimeout(function() {
             $("#kiosk-step-1").show();
@@ -448,15 +308,11 @@ var iinFake,
               var el = _lanes[jx];
               if (el.id == a.id) {
                 el.count = a.count;
-                el.reserved = a.reserved;
                 _lanes[jx] = el;
               }
             });
           });
 
-          if (msg.reservation) {
-            _reservations.push(msg.reservation);
-          }
         }
       }
 
@@ -479,23 +335,12 @@ var iinFake,
       }
 
       function printTicket() {    	  
-    	console.log('print ticket');
-    	var iinText = iinFake.text();
-    	var str = iinText.substr(2, 3)+iinText.substr(7, 3)+iinText.substr(11, 4);
-		console.log("I AM IN IF");
-        if (lanes && lanes.length > 0) {
-        	console.log('enqueue print');
-        	iin = null;
-            enqueue(_lang);
+    	if (lanes && lanes.length > 0) {
+        	enqueue(_lang);
         }
        	clearAll();
       }
       function enqueue(language) {
-        var cId = iin;
-        console.log(cId);
-        if (cId == null) {
-          cId = "000000000000";
-        }
         var arr = lanes.split(";");
         var laneArr = new Array();
         $(arr).each(function(ix) {
@@ -507,10 +352,10 @@ var iinFake,
         var msg = {
           action: "enqueue",
           lang: language,
-          client: cId,
+          client: "000000000000",
           lanes: laneArr
         };
-        console.log('123123');
+        console.log('send message to other about new ticket');
         console.log(msg);
         XmppClient.send("queue", JSON.stringify(msg));
       }
