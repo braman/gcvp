@@ -320,55 +320,60 @@ public class QueuePlugin implements Plugin {
 				em.getTransaction().commit();
 				for(int j=0;j<fils.size();j++){
 					Set<Lane> laneAll = new HashSet<Lane>();
-					int start = 1;
-					int end = 999/as1.length;
-					for(int i=1;i<=as1.length;i++){
-						em.getTransaction().begin();
-						Lane l1 = new Lane();
-						l1.setGroup(fils.get(j));
-						if((j+1)<10){
-							if(i<10){
-								l1.setUsername("fils0"+(j+1)+"a0"+i);
+					//if (fils.get(j)!=fil1){
+						int start = 1;
+						int end = 999/as1.length;
+						for(int i=1;i<=as1.length;i++){
+							em.getTransaction().begin();
+							Lane l1 = new Lane();
+							l1.setGroup(fils.get(j));
+							if((j+1)<10){
+								if(i<10){
+									l1.setUsername("fils0"+(j+1)+"a0"+i);
+								}else{
+									l1.setUsername("fils0"+(j+1)+"a"+i);
+								}
 							}else{
-								l1.setUsername("fils0"+(j+1)+"a"+i);
+								if(i<10){
+									l1.setUsername("fils"+(j+1)+"a0"+i);
+								}else{
+									l1.setUsername("fils"+(j+1)+"a"+i);
+								}
 							}
-						}else{
-							if(i<10){
-								l1.setUsername("fils"+(j+1)+"a0"+i);
+							
+							if(start<10){
+								l1.setRangeStart("00"+start);
+							}else if(start<100){
+								l1.setRangeStart("0"+start);
 							}else{
-								l1.setUsername("fils"+(j+1)+"a"+i);
+								l1.setRangeStart(""+start);
 							}
+							if(end<100){
+								l1.setRangeEnd("0"+end);
+							}else{
+								l1.setRangeEnd(""+end);
+							}
+							em.persist(l1);
+							BundleMessage messageR = new BundleMessage();
+							messageR.setKey(String.format("lane.%s.name",l1.getUsername()));
+							messageR.setLang(Language.RU);
+							messageR.setValue(as1[i-1]);
+							em.persist(messageR);
+							
+							BundleMessage messageK = new BundleMessage();
+							messageK.setKey(String.format("lane.%s.name",l1.getUsername()));
+							messageK.setLang(Language.KK);
+							messageK.setValue(as2[i-1]);
+							em.persist(messageK);
+							start = end+1;
+							end = end+999/as1.length;
+							laneAll.add(l1);
+							em.getTransaction().commit();
 						}
-						
-						if(start<10){
-							l1.setRangeStart("00"+start);
-						}else if(start<100){
-							l1.setRangeStart("0"+start);
-						}else{
-							l1.setRangeStart(""+start);
-						}
-						if(end<100){
-							l1.setRangeEnd("0"+end);
-						}else{
-							l1.setRangeEnd(""+end);
-						}
-						em.persist(l1);
-						BundleMessage messageR = new BundleMessage();
-						messageR.setKey(String.format("lane.%s.name",l1.getUsername()));
-						messageR.setLang(Language.RU);
-						messageR.setValue(as1[i-1]);
-						em.persist(messageR);
-						
-						BundleMessage messageK = new BundleMessage();
-						messageK.setKey(String.format("lane.%s.name",l1.getUsername()));
-						messageK.setLang(Language.KK);
-						messageK.setValue(as2[i-1]);
-						em.persist(messageK);
-						start = end+1;
-						end = end+999/as1.length;
-						laneAll.add(l1);
-						em.getTransaction().commit();
-					}
+//					}else{
+//						
+//					}
+					
 					em.getTransaction().begin();
 					User gcvpKiosk1 = new User();
 					gcvpKiosk1.setRole(Role.KIOSK);
@@ -427,7 +432,6 @@ public class QueuePlugin implements Plugin {
 						}else{
 							gcvpunit1.setWindow(""+i);
 						}
-						System.out.println(laneAll.size()+"-----------------------------");
 						gcvpunit1.setLanes(laneAll);
 						gcvpunit1.setMonitorUnit(mu1);		
 						try {

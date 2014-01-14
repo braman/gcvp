@@ -58,25 +58,27 @@ public class Dashboard extends User {
 						.getPubSubModule()
 						.getNode(dash.getGroup().getName() + "." + lane.getUsername()
 										+ ".pubsub");
-				System.out.println(dash.getGroup().getName() + "." + lane.getUsername()+ ".pubsub");
-				System.out.println(node+"node---------------");
-				System.out.println(user+"user --------------------");
+//				System.out.println(dash.getGroup().getName() + "." + lane.getUsername()+ ".pubsub");
+//				System.out.println(node+"node---------------");
+//				System.out.println(user+"user --------------------");
 				NodeSubscription subscription = node.getSubscription(user);
 				if(subscription!=null){
 					QLog.info(subscription+ " is sqbscription");
 					node.cancelSubscription(subscription);
 				}				
 			}
-			LeafNode node = (LeafNode) XMPPServer
-					.getInstance()
-					.getPubSubModule()
-					.getNode(
-							dash.getGroup().getName() 
-									+ ".pubsub");
-			if (node.getSubscription(user) == null) {
-				node.createSubscription(null, Constants.QUEUE, user, false,
-						null);
-				QLog.info("created subscriptions for #0", user);
+			if(dash.dashboardLanes.size()>0){
+				LeafNode node = (LeafNode) XMPPServer
+						.getInstance()
+						.getPubSubModule()
+						.getNode(
+								dash.getGroup().getName() 
+										+ ".pubsub");
+				if (node.getSubscription(user) == null) {
+					node.createSubscription(null, Constants.QUEUE, user, false,
+							null);
+					QLog.info("created subscriptions for #0", user);
+				}
 			}
 		}
 	}
