@@ -32,6 +32,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 
+import kz.bee.util.QLog;
+
 import org.jivesoftware.openfire.audit.AuditStreamIDFactory;
 import org.jivesoftware.openfire.auth.AuthToken;
 import org.jivesoftware.openfire.auth.UnauthorizedException;
@@ -715,6 +717,7 @@ public class SessionManager extends BasicModule implements ClusterEventListener 
      * @return the <code>Session</code> associated with the JID.
      */
     public ClientSession getSession(JID from) {
+    	QLog.info("start");
         // Return null if the JID is null or belongs to a foreign server. If the server is
         // shutting down then serverName will be null so answer null too in this case.
         if (from == null || serverName == null || !serverName.equals(from.getDomain())) {
@@ -732,7 +735,7 @@ public class SessionManager extends BasicModule implements ClusterEventListener 
         if (from.getResource() == null || from.getNode() == null) {
             return null;
         }
-
+        QLog.info("end");
         return routingTable.getClientRoute(from);
     }
 

@@ -22,6 +22,8 @@ package org.jivesoftware.openfire;
 
    import java.util.StringTokenizer;
 
+import kz.bee.util.QLog;
+
 import org.jivesoftware.openfire.container.BasicModule;
 import org.jivesoftware.openfire.interceptor.InterceptorManager;
 import org.jivesoftware.openfire.interceptor.PacketRejectedException;
@@ -78,6 +80,7 @@ public class MessageRouter extends BasicModule {
      * @throws NullPointerException If the packet is null
      */
     public void route(Message packet) {
+    	QLog.info("start");
         if (packet == null) {
             throw new NullPointerException();
         }
@@ -135,6 +138,7 @@ public class MessageRouter extends BasicModule {
                 session.process(reply);
             }
         }
+        QLog.info("end");
     }
 
     /**

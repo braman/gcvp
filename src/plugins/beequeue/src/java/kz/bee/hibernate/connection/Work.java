@@ -2,6 +2,7 @@ package kz.bee.hibernate.connection;
 
 import javax.persistence.EntityManager;
 
+import kz.bee.util.QLog;
 import kz.bee.util.QueuePluginException;
 
 public abstract class Work<T> {
@@ -21,6 +22,7 @@ public abstract class Work<T> {
 	protected abstract T work(EntityManager em) throws QueuePluginException;
 	
 	public final T workInTransaction() throws QueuePluginException{
+		QLog.info("started");
 		long start = System.currentTimeMillis();
 		em = DBManager.newEm();
 		em.getTransaction().begin();
@@ -30,6 +32,7 @@ public abstract class Work<T> {
 			em.close();
 			long end = System.currentTimeMillis();
 			System.out.println("Work succesfully done in:"+(end-start)+" ms");
+			QLog.info("end");
 			return result;
 		}catch(Exception e){
 			if(e instanceof QueuePluginException){

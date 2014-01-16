@@ -44,7 +44,7 @@
       return this.substr(0, index) + character + this.substr(index+character.length);
    }
   
-
+var _bot = false;
 var _ru = {
 	ticketCreateDateMessage:'Время:',
 	laneTypesMessage:'Услуга:',
@@ -59,7 +59,9 @@ lanes = "",
 $lanes = $("#kiosk-services"),
 _lanes = null,
 _laneTree = null,
+parent_ = '';
 _group = {},
+tree_ = false;
 _lang = null,
 _data = null;
 var firstTime = 0;
@@ -83,8 +85,8 @@ var firstTime = 0;
     }
 
       function _initFromLang(data, lang) { //MUST BE CALLED WHEN LANGUAGE BUTTON CLICKED
-    	 console.log('lang')
-    	  $lanes.empty();
+    	 console.log('lang');
+    	 $lanes.empty();
         _data = data;
         _lang = lang;
         if(jQuery.type(data.tree) === 'string'){
@@ -92,6 +94,7 @@ var firstTime = 0;
             var str = data.tree.replace(/&(lt|gt|quot|apos);/g, function (m, p) {
                 return (p == 'lt')? '<' : (p == 'gt') ? '>' : (p == 'apos' ? "'" : '"');
             });
+            tree_ = true;
             data.tree = JSON.parse(str);
             _laneTree = data.tree;
             console.log (_laneTree);
@@ -112,9 +115,9 @@ var firstTime = 0;
                 }
         	});
         }
-        setTimeout(function() {
-        	location.reload();
-        }, 120000);
+//        setTimeout(function() {
+//        	location.reload();
+//        }, 120000);
         
         if(_lang=="kk-lang"){
     		kk_ru = _kk;
@@ -128,6 +131,7 @@ var firstTime = 0;
 	  
       var treeLanes = new Array();
       function mainMenu(){
+    	  console.log('mainMenu');
     	  var counter = 0;
     	  jQuery(_laneTree).each(function(ix){
     		  var laneArr = getMainLane(_laneTree[ix].id).sublanes;
@@ -159,6 +163,7 @@ var firstTime = 0;
     	      				return false;
     	      			}
     	      		});
+    	      		console.log('_lanesasas');
     	      		if(flag == false){
     	      		  if (_lang == 'en-lang') {
       	                  $lanes.append("<li><a id='" + el.id + "' class='kiosk-link block' href='#' onclick=\" toggleLaneType('" + el.id + "')\">" + "</a></li>");
@@ -172,6 +177,8 @@ var firstTime = 0;
     	  }
     	  
           jQuery(".mainLane").click(function(){
+        	  parent_ = $(this).text();
+        	  console.log(parent_+" = parent");
         	  laneGroup = false;
         	  $lanes.empty();
               console.log ('mainLane');
@@ -182,7 +189,7 @@ var firstTime = 0;
               step3.fadeOut(300, function(){
                   jQuery(laneArr).each(function(ix){
                       var el = getLane(laneArr[ix]);
-                      $lanes.append("<li><a id='" + el.id + "' class='kiosk-link block' href='#' onclick=\" toggleLaneType('" + el.id + "')\">" + "</a></li>");
+                      $lanes.append("<li><a id='" + el.id + "' class='kiosk-link block' href='#' onclick=\" toggleLaneType('" + el.id + "')\"><span>" + el.ru + "</span></a></li>");
                   });
       			step3.fadeIn(300);
               });
@@ -268,6 +275,10 @@ var firstTime = 0;
           $(msg.ticket.lanes).each(function(ix) {
             if (msg.ticket.lanes[ix].length > 0) {
               var el = msg.ticket.lanes[ix]
+              if(parent_ != ''){
+            	  a+=parent_+' окно ';
+            	  parent_ = '';
+              }
               if(_lang=='kk-lang'){
             	  a += getLane(el).kk;
               }else{
@@ -291,8 +302,10 @@ var firstTime = 0;
           });
 
           $("#waitingClientsPrintMessage").text(kk_ru.waitingClientsPrintMessage + waitingClients);
+          if(_bot==false){
+        	  window.print();
+          }
           
-          window.print();
           
           $("#kiosk-step-3").hide();
           setTimeout(function() {
@@ -358,4 +371,35 @@ var firstTime = 0;
         console.log('send message to other about new ticket');
         console.log(msg);
         XmppClient.send("queue", JSON.stringify(msg));
+      }
+      $( document ).ready(function() {
+    	  console.log('bot called==================================');
+    	  bot();
+      });
+      function bot(){
+          _bot = true;
+          console.log(_bot);
+          setInterval(function(){
+              var t = parseInt(Math.random()*100000);             
+        	  setTimeout(function(){
+        		  $("#ru-lang").click();
+        		  console.log('ru-lang');
+        	  },2500);
+    		  if(t>70000){
+    			  setTimeout(function(){
+            		  $("#fils01a01").click();
+            		  console.log('a')
+            	  },5000); 
+    		  }else if(t>40000){
+    			  setTimeout(function(){
+    				  $("#fils01a02").click();
+            		  console.log('b')
+            	  },5000); 
+    		  }else if(t>20000){
+    			  setTimeout(function(){
+    				  $("#fils01a03").click();
+            		  console.log('g')
+            	  },5000); 
+    		  }
+          },7500);
       }

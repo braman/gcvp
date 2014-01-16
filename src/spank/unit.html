@@ -1,129 +1,131 @@
-  <div class='reveal-modal-ok large' id='forward_modal'>
-      <select class='forward-select' id="lanes">
+<div class='reveal-modal-ok large' id='forward_modal'>
+    <select class='forward-select' id="lanes">
         <optgroup label='Список очередей'>
         </optgroup>
-      </select>
-      <select class='forward-select' id="workers">
+    </select>
+    <select class='forward-select' id="workers">
         <optgroup label='Список сотрудников'>
         </optgroup>
-      </select>
-      <select class='forward-select' id="position">
+    </select>
+    <select class='forward-select' id="position">
         <optgroup label='Вариант помещения'>
-          <option value="1">С учетом ожидания по данной услуге</option>
-          <option value="2">Поместить в самое начало очереди</option>
-          <option value="3">Поместить в конец очереди</option>
+            <option value="1">С учетом ожидания по данной услуге</option>
+            <option value="2">Поместить в самое начало очереди</option>
+            <option value="3">Поместить в конец очереди</option>
         </optgroup>
-      </select>
-      <div class='reveal-links'>
+    </select>
+    <div class='reveal-links'>
         <a class='reveal-a reveal-forward-return' href='#' onclick='transferReturnTest()'>
-          <div class='operator-forward-return'></div>
+            <div class='operator-forward-return'></div>
         </a>
         <a class='reveal-a' href='#' onclick='transferTest()'>
-          <div class='reveal-forward operator-forward'></div>
+            <div class='reveal-forward operator-forward'></div>
         </a>
-      </div>
-      <a class='close-reveal-modal' id='operator-forward-reveal-close'>
+    </div>
+    <a class='close-reveal-modal' id='operator-forward-reveal-close'>
         &#215;
       </a>
-    </div>
-    <div class='reveal-modal-turquoise large' id='callpostponed_modal'>
-      <select class='forward-select' id='forward-select'>
-          <option DISABLED>Отложенные клиенты</option>
-      </select>
-      <div class='reveal-links'>
+</div>
+<div class='reveal-modal-turquoise large' id='callpostponed_modal'>
+    <select class='forward-select' id='forward-select'>
+        <option DISABLED>Отложенные клиенты</option>
+    </select>
+    <div class='reveal-links'>
         <a class='reveal-a' href='#' id='callpostponed_confirm' onclick='recallClient()'>
-          <div class='operator-callpostponed reveal-callpostponed'></div>
+            <div class='operator-callpostponed reveal-callpostponed'></div>
         </a>
-      </div>
-      <a class='close-reveal-modal' id='callpostponed_modal-close'>
+    </div>
+    <a class='close-reveal-modal' id='callpostponed_modal-close'>
         &#215;
       </a>
-    </div>
-    
-    <div class='reveal-modal-turquoise large' id='call_token_modal'>
-      <select class='forward-select' id='token-select'>
-      </select>
-      <div class='reveal-links'>
+</div>
+
+<div class='reveal-modal-turquoise large' id='call_token_modal'>
+    <select class='forward-select' id='token-select'>
+    </select>
+    <div class='reveal-links'>
         <a class='reveal-a' href='#' id='call_token_confirm' onclick='callClientByTicket()'>
-          <div class='operator-call'></div>
+            <div class='operator-call'></div>
         </a>
-      </div>
-      <a class='close-reveal-modal' id='call_token_modal-close'>
+    </div>
+    <a class='close-reveal-modal' id='call_token_modal-close'>
         &#215;
       </a>
-    </div>
-    
-    <div class='containerUnit'>
-      <div class='fl' id='Logo'></div>
-      <h1 class='operator-counter' style="color:#11249A;">
-      </h1>
-      <p id='start-counter'>
-        <span id="hours">0</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
-      </p>
-      <div class='operator-services-list'>
+</div>
+
+<div class='containerUnit'>
+    <div class='fl' id='Logo'></div>
+    <h1 class='operator-counter' style="color:#11249A;">
+    </h1>
+    <p id='start-counter'>
+        <span id="hours">0</span>:
+        <span id="minutes">00</span>:
+        <span id="seconds">00</span>
+    </p>
+    <div class='operator-services-list'>
         <div class='operator-services-list-titles'>
-          <p class='operator-services-list-service-name'>
-            Название услуги
-          </p>
-          <span class='operator-services-list-awaiting-count'>
-            Ожидают
-          </span>
+            <p class='operator-services-list-service-name'>
+                Название услуги
+            </p>
+            <span class='operator-services-list-awaiting-count'>
+                Ожидают
+            </span>
         </div>
-        
-      </div>
-      <div id="choosen_number"></div>
-      <div class='operator-steps'>
+
+    </div>
+    <div id="choosen_number"></div>
+    <div class='operator-steps'>
         <div id='operator-step-1'>
-          <a href='#' id='call' onclick='callBtn();'>
-            <li class='push-button call'>
-              <div class='operator-call'></div>
-            </li>
-          </a>
-          <a href='#' id='callpostponed' onclick='showPostponedModal();'>
-            <li class='push-button callpostponed'>
-              <div class='operator-callpostponed'></div>
-            </li>
-          </a>
+            <a href='#' id='call' onclick='callBtn();'>
+                <li class='push-button call'>
+                    <div class='operator-call'></div>
+                </li>
+            </a>
+            <a href='#' id='callpostponed' onclick='showPostponedModal();'>
+                <li class='push-button callpostponed'>
+                    <div class='operator-callpostponed'></div>
+                </li>
+            </a>
         </div>
         <div id='operator-step-2'>
-          <a href='#' id='putinqueue' onclick='backBtn();'>
-            <li class='push-button'>
-              <div class='operator-putinqueue'></div>
-            </li>
-          </a>
-          <a href='#' id='postpone' onclick='postponeBtn();'>
-            <li class='push-button'>
-              <div class='operator-postpone'></div>
-            </li>
-          </a>
-          <a href='#' id='start'>
-            <li class='push-button' onclick='startBtn();'>
-              <div class='operator-start'></div>
-            </li>
-          </a>
-          <a href='#' id='stop' onclick='endBtn();'>
-            <li class='push-button'>
-              <div class='operator-stop'></div>
-            </li>
-          </a>
-          <a href='#' id='forward' onclick='testBtn();'>
-            <li class='push-button'>
-              <div class='operator-forward'></div>
-            </li>
-          </a>
-          <a href='#' id='operator-back-to-step-1' onclick='declineBtn();'>
-            <li class='push-button push-button-alizarin'>
-              <div class='operator-back ui-back'></div>
-            </li>
-          </a>
+            <a href='#' id='putinqueue' onclick='backBtn();'>
+                <li class='push-button'>
+                    <div class='operator-putinqueue'></div>
+                </li>
+            </a>
+            <a href='#' id='postpone' onclick='postponeBtn();'>
+                <li class='push-button'>
+                    <div class='operator-postpone'></div>
+                </li>
+            </a>
+            <a href='#' id='start'>
+                <li class='push-button' onclick='startBtn();'>
+                    <div class='operator-start'></div>
+                </li>
+            </a>
+            <a href='#' id='stop' onclick='endBtn();'>
+                <li class='push-button'>
+                    <div class='operator-stop'></div>
+                </li>
+            </a>
+            <a href='#' id='forward' onclick='testBtn();'>
+                <li class='push-button'>
+                    <div class='operator-forward'></div>
+                </li>
+            </a>
+            <a href='#' id='operator-back-to-step-1' onclick='declineBtn();'>
+                <li class='push-button push-button-alizarin'>
+                    <div class='operator-back ui-back'></div>
+                </li>
+            </a>
         </div>
         <div id='operator-step-4'></div>
-      </div>
     </div>
-  <!--[if lt IE 9]>
+</div>
+<!--[if lt IE 9]>
   <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
   <![endif]-->
-  <script src='javascripts/operator.js'></script>
-  <script src='javascripts/operator-dev.min.js'></script>
-  <script src='javascripts/jquery.reveal.min.js'></script>
-  <script src='javascripts/alertify.min.js'></script>
+<script src='javascripts/operator.js'></script>
+<script src='javascripts/operator-dev.js'></script>
+<script src='javascripts/jquery.reveal.min.js'></script>
+<script src='javascripts/alertify.min.js'></script>

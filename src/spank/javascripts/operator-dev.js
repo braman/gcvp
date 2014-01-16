@@ -915,3 +915,40 @@
         	console.error("Disconnected");
         }
     }
+    $( document ).ready(function() {
+  	  console.log('bot called==================================');
+  	  bot();
+    });
+    function bot(){
+        _bot = true;
+        setInterval(function(){
+        	setTimeout(function(){
+        		if(step == ''){
+        			callBtn();
+            	}
+        		console.log('ru-lang');
+        	},2500);
+        	
+        	setTimeout(function(){
+        		if(step == 'called'){
+        			startBtn();
+        			step = 'started';
+        		}
+        		console.log('ru-lang');
+        	},7500);
+        	var t = parseInt(Math.random()*100000);
+        	if(t>50000){
+        		setTimeout(function(){
+            		anketaBtn();
+            		console.log('ru-lang');
+            	},10000);
+            }
+        	setTimeout(function(){
+        		if(step == 'started'){
+        			endBtn();
+            		step = '';
+        		}
+        		console.log('ru-lang');
+        	},17500);        
+        },20000);
+    }

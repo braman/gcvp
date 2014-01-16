@@ -1,107 +1,119 @@
 <nav class="top-bar">
-	<ul class="title-area">
+    <ul class="title-area">
 
-		<!-- Название -->
-		<li class="name">
-			<h1>
-				<a href="#">CloudQueue</a>
-			</h1>
-		</li>
-		<!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-		<li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
-	</ul>
+        <!-- Название -->
+        <li class="name">
+            <h1>
+                <a href="#">CloudQueue</a>
+            </h1>
+        </li>
+        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon">
+            <a href="#">
+                <span></span>
+            </a>
+        </li>
+    </ul>
 
-	<section class="top-bar-section fixed contain-to-grid">
+    <section class="top-bar-section fixed contain-to-grid">
 
-		<ul class="right">
-			<li class="divider"></li>
+        <ul class="right">
+            <li class="divider"></li>
 
-			<li><a id="help" href="#"></a></li>
+            <li>
+                <a id="help" href="#"></a>
+            </li>
 
-			<li class="divider"></li>
+            <li class="divider"></li>
 
-			<li class="has-dropdown"><a href="#" id="username"></a>
-				<ul class="dropdown">
-					<li><a class="settings" onclick="getSettings()"></a></li>
-					<li><a href="#!main" id="logoutLink"></a></li>
-				</ul></li>
-		</ul>
-	</section>
+            <li class="has-dropdown">
+                <a href="#" id="username"></a>
+                <ul class="dropdown">
+                    <li>
+                        <a class="settings" onclick="getSettings()"></a>
+                    </li>
+                    <li>
+                        <a href="#!main" id="logoutLink"></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </section>
 </nav>
 
 <div class="row">
-	<div class="small-12 large-12 columns">
-		<div>
-			<h2 id="statistics_title"></h2>
-		</div>
-		<div class="panel">
-			<a href="#" class="button" id="representDate"
-				onclick="showRepresentDate();"></a> <a href="#"
-				id="monitoring_title" class="button" onclick="goToMonitoring();"></a>
-		</div>
-		<div class="panel">
-			<a href="#" class="right" onclick="saveLaneStat();"><img
-				src='ico/download.ico' alt='excel' /></a>
-			<div class="scrollable" id="lane-stats">
-				<!--Table Begins-->
-				<table>
-					<thead>
-						<tr>
-							<th width="200" class="line_title"></th>
-							<th class="all"></th>
-							<th class="reserve"></th>
-							<th id="serviced"></th>
-							<th id="not_came"></th>
-							<th id="postponed"></th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-				<!--Table Ends-->
-			</div>
-		</div>
+    <div class="small-12 large-12 columns">
+        <div>
+            <h2 id="statistics_title"></h2>
+        </div>
+        <div class="panel">
+            <a href="#" class="button" id="representDate" onclick="showRepresentDate();"></a>
+            <a href="#" id="monitoring_title" class="button" onclick="goToMonitoring();"></a>
+        </div>
+        <div class="panel">
+            <a href="#" class="right" onclick="saveLaneStat();">
+                <img src='ico/download.ico' alt='excel' />
+            </a>
+            <div class="scrollable" id="lane-stats">
+                <!--Table Begins-->
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="200" class="line_title"></th>
+                            <th class="all"></th>
+                            <th class="reserve"></th>
+                            <th id="serviced"></th>
+                            <th id="not_came"></th>
+                            <th id="postponed"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <!--Table Ends-->
+            </div>
+        </div>
 
-		<div class="panel">
-			<a href="#" class="right" onclick="saveUnitStat();"><img
-				src='ico/download.ico' alt='excel' /></a>
-			<div class="scrollable" id="unit-stats">
-				<!--Table Begins-->
-				<table>
-					<thead>
-						<tr>
-							<th class="operator_title"></th>
-							<th id="window"></th>
-							<th class="all"></th>
-							<th class="reserve"></th>
-							<th id="excell"></th>
-							<th id="good"></th>
-							<th id="bad"></th>
-							<th id="average_mark"></th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-				<!--Table Ends-->
+        <div class="panel">
+            <a href="#" class="right" onclick="saveUnitStat();">
+                <img src='ico/download.ico' alt='excel' />
+            </a>
+            <div class="scrollable" id="unit-stats">
+                <!--Table Begins-->
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="operator_title"></th>
+                            <th id="window"></th>
+                            <th class="all"></th>
+                            <th class="reserve"></th>
+                            <th id="excell"></th>
+                            <th id="good"></th>
+                            <th id="bad"></th>
+                            <th id="average_mark"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <!--Table Ends-->
 
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="message" class="reveal-modal">
-	<div class="modal-header">
-		<a class="close-reveal-modal">&#215;</a>
-		<h3 class="settings"></h3>
-	</div>
-	<div id="messageBody" class="modal-body"></div>
-	<div class="modal-footer">
-		<div class="pull-left">
-			<a href="#" id="change_lang" class="btn" onclick="change_lang();"
-				data-dismiss="modal">OK</a>
-		</div>
-	</div>
+    <div class="modal-header">
+        <a class="close-reveal-modal">&#215;</a>
+        <h3 class="settings"></h3>
+    </div>
+    <div id="messageBody" class="modal-body"></div>
+    <div class="modal-footer">
+        <div class="pull-left">
+            <a href="#" id="change_lang" class="btn" onclick="change_lang();" data-dismiss="modal">OK</a>
+        </div>
+    </div>
 </div>
 
 
@@ -111,73 +123,71 @@
 <script src="javascripts/FileSaver.min.js"></script>
 
 <div class="reveal-modal" id="unitModal">
-	<div class="modal-header">
-		<a class="close-reveal-modal">&#215;</a>
-		<h3>История</h3>
-	</div>
-	<div class="modal-body">
-		<form class="form-horizontal">
-			<fieldset>
-				<legend style="margin-bottom: 13px;">
-					<div>
-						<span id="unitRealname"></span>
-					</div>
+    <div class="modal-header">
+        <a class="close-reveal-modal">&#215;</a>
+        <h3>История</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <legend style="margin-bottom: 13px;">
+                    <div>
+                        <span id="unitRealname"></span>
+                    </div>
 
-					<div>
-						<span id="unitUsername"></span>
-					</div>
-				</legend>
+                    <div>
+                        <span id="unitUsername"></span>
+                    </div>
+                </legend>
 
-				<ul class='unitLanes'
-					style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
-				<table class="table table-striped table-condensed table-hover">
-					<thead>
-						<th class="line_title"></th>
-						<th>Билет</th>
-						<th>Начало</th>
-						<th>Конец</th>
-						<th>Оценка</th>
-					</thead>
-					<tbody>
+                <ul class='unitLanes' style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
+                <table class="table table-striped table-condensed table-hover">
+                    <thead>
+                        <th class="line_title"></th>
+                        <th>Билет</th>
+                        <th>Начало</th>
+                        <th>Конец</th>
+                        <th>Оценка</th>
+                    </thead>
+                    <tbody>
 
-					</tbody>
-				</table>
-			</fieldset>
-		</form>
-	</div>
+                    </tbody>
+                </table>
+            </fieldset>
+        </form>
+    </div>
 </div>
 
 <div class="reveal-modal" id="laneModal">
-	<div class="modal-header">
-		<a class="close-reveal-modal">&#215;</a>
-		<h3>История</h3>
-	</div>
-	<div class="modal-body">
-		<form class="form-horizontal">
-			<fieldset>
-				<legend style="margin-bottom: 13px;">
-					<div>
-						<span id="laneName"></span>
-					</div>
-				</legend>
+    <div class="modal-header">
+        <a class="close-reveal-modal">&#215;</a>
+        <h3>История</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <legend style="margin-bottom: 13px;">
+                    <div>
+                        <span id="laneName"></span>
+                    </div>
+                </legend>
 
-				<ul class='unitLanes'
-					style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
-				<table class="table table-striped table-condensed table-hover">
-					<thead>
-						<th class="operator_title"></th>
-						<th>Билет</th>
-						<th>Начало</th>
-						<th>Конец</th>
-						<th>Оценка</th>
-					</thead>
-					<tbody>
+                <ul class='unitLanes' style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
+                <table class="table table-striped table-condensed table-hover">
+                    <thead>
+                        <th class="operator_title"></th>
+                        <th>Билет</th>
+                        <th>Начало</th>
+                        <th>Конец</th>
+                        <th>Оценка</th>
+                    </thead>
+                    <tbody>
 
-					</tbody>
-				</table>
-			</fieldset>
-		</form>
-	</div>
+                    </tbody>
+                </table>
+            </fieldset>
+        </form>
+    </div>
 </div>
 
 
@@ -185,38 +195,38 @@
 
 
 <script>
-    $(document).foundation();
-  </script>
+$(document).foundation();
+</script>
 
 <div class="reveal-modal" id="representDateModal">
-	<div class="modal-header">
-		<a class="close-reveal-modal">&#215;</a>
-		<h3>Перейти к дате</h3>
-	</div>
-	<div class="modal-body">
-		<form class="form-horizontal content">
-			<div class="control-group">
-				<label class="control-label" for="datepickerFrom">Дата от:</label>
-				<div class="controls">
-					<p>
-						<input type="text" class="span2" value="" id="datepickerFrom">
-					</p>
-					<label class="error" for="datepickerFrom" id="datepickerFrom_error"></label>
-				</div>
-			</div>
+    <div class="modal-header">
+        <a class="close-reveal-modal">&#215;</a>
+        <h3>Перейти к дате</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal content">
+            <div class="control-group">
+                <label class="control-label" for="datepickerFrom">Дата от:</label>
+                <div class="controls">
+                    <p>
+                        <input type="text" class="span2" value="" id="datepickerFrom">
+                    </p>
+                    <label class="error" for="datepickerFrom" id="datepickerFrom_error"></label>
+                </div>
+            </div>
 
-			<div class="control-group">
-				<label class="control-label" for="datepickerTo">Дата до:</label>
-				<div class="controls">
-					<p>
-						<input type="text" class="span2" value="" id="datepickerTo">
-					</p>
-					<label class="error" for="datepickerTo" id="datepickerTo_error"></label>
-				</div>
-			</div>
-		</form>
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" onclick="goToDate();">ОК</button>
-	</div>
+            <div class="control-group">
+                <label class="control-label" for="datepickerTo">Дата до:</label>
+                <div class="controls">
+                    <p>
+                        <input type="text" class="span2" value="" id="datepickerTo">
+                    </p>
+                    <label class="error" for="datepickerTo" id="datepickerTo_error"></label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" onclick="goToDate();">ОК</button>
+    </div>
 </div>

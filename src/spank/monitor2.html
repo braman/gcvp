@@ -1,191 +1,207 @@
 <nav class="top-bar">
-  <ul class="title-area">
-    
-    <!-- Название -->
-    <li class="name">
-      <h1><a href="#">CloudQueue</a></h1>
-    </li>
-    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
-  </ul>
+    <ul class="title-area">
 
-  <section class="top-bar-section fixed contain-to-grid">
+        <!-- Название -->
+        <li class="name">
+            <h1><a href="#">CloudQueue</a>
+            </h1>
+        </li>
+        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon">
+            <a href="#">
+                <span></span>
+            </a>
+        </li>
+    </ul>
 
-<ul class="right">
-<li class="divider"></li>
+    <section class="top-bar-section fixed contain-to-grid">
 
-<li><a id="help" href="#"></a>
-</li>
+        <ul class="right">
+            <li class="divider"></li>
 
-<li class="divider"></li>
+            <li>
+                <a id="help" href="#"></a>
+            </li>
 
-<li class="has-dropdown"><a href="#" id="username"></a>
-<ul class="dropdown">
-<li><a class="settings" onclick="getSettings()"></a></li>
-<li><a href="#!main" id="logoutLink"></a></li>
-</ul>
-</li>
-</ul>
-  </section>
+            <li class="divider"></li>
+
+            <li class="has-dropdown">
+                <a href="#" id="username"></a>
+                <ul class="dropdown">
+                    <li>
+                        <a class="settings" onclick="getSettings()"></a>
+                    </li>
+                    <li>
+                        <a href="#!main" id="logoutLink"></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </section>
 </nav>
 
-  <div class="row">
-  <div class="small-12 large-12 columns">
-<div>
-<h2 id="monitoring"></h2>
-</div>
-<div class="panel">
-     <a id="go_to_statistics" href="#" class="button radius" onclick="goToStatictics();"></a>
-     <a id="go_to_tickets" href="#" class="button radius" onclick="goToTickets();"></a>
-     </div>
-            <div class="panel">
-            <a href="#" class="right" onclick="saveText();"><img src='ico/download.ico' alt='excel' /></a>
+<div class="row">
+    <div class="small-12 large-12 columns">
+        <div>
+            <h2 id="monitoring"></h2>
+        </div>
+        <div class="panel">
+            <a id="go_to_statistics" href="#" class="button radius" onclick="goToStatictics();"></a>
+            <a id="go_to_tickets" href="#" class="button radius" onclick="goToTickets();"></a>
+        </div>
+        <div class="panel">
+            <a href="#" class="right" onclick="saveText();">
+                <img src='ico/download.ico' alt='excel' />
+            </a>
             <div class="scrollable" id="lane-stats">
-              <!--Table Begins-->
-              <table>
-                <thead>
-                  <tr>
-                    <th class="line" width="200"></th>
-                    <th class="all"></th>
-                    <th class="reserve"></th>
-                    <th id="serviced"></th>
-                    <th id="not_came"></th>
-                    <th id="routed"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-              <!--Table Ends-->
+                <!--Table Begins-->
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="line" width="200"></th>
+                            <th class="all"></th>
+                            <th class="reserve"></th>
+                            <th id="serviced"></th>
+                            <th id="not_came"></th>
+                            <th id="routed"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <!--Table Ends-->
             </div>
-          </div>
-            
-            <div class="panel">
-            <a href="#" class="right" onclick="saveUnitText();"><img src='ico/download.ico' alt='excel' /></a>
+        </div>
+
+        <div class="panel">
+            <a href="#" class="right" onclick="saveUnitText();">
+                <img src='ico/download.ico' alt='excel' />
+            </a>
             <div class="scrollable" id="unit-stats">
-              <!--Table Begins-->
-              <table>
-                <thead>
-                  <tr>
-                    <th class="operator"></th>
-                    <th id="window"></th>
-                    <th class="line"></th>
-                    <th id="call_time"></th>
-                    <th id="start_time"></th>
-                    <th id="ticket_number"></th>
-                    <th class="all"></th>
-                    <th class="reserve"></th>
-                    <th id="excell"></th>
-                    <th id="good"></th>
-                    <th id="bad"></th>
-                    <th id="average"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-              <!--Table Ends-->
+                <!--Table Begins-->
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="operator"></th>
+                            <th id="window"></th>
+                            <th class="line"></th>
+                            <th id="call_time"></th>
+                            <th id="start_time"></th>
+                            <th id="ticket_number"></th>
+                            <th class="all"></th>
+                            <th class="reserve"></th>
+                            <th id="excell"></th>
+                            <th id="good"></th>
+                            <th id="bad"></th>
+                            <th id="average"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <!--Table Ends-->
             </div>
-          </div>
-          </div>
-      </div>
+        </div>
+    </div>
+</div>
 
 <div class="reveal-modal" id="unitModal">
-<div class="modal-header">
-<a class="close-reveal-modal">&#215;</a>
-<h3 class="history"></h3>
-</div>
-<div class="modal-body">
-<form class="form-horizontal">
-<fieldset>
-<legend style="margin-bottom: 13px;">
-<div>
-<span id="unitRealname"></span>
-</div>
+    <div class="modal-header">
+        <a class="close-reveal-modal">&#215;</a>
+        <h3 class="history"></h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <legend style="margin-bottom: 13px;">
+                    <div>
+                        <span id="unitRealname"></span>
+                    </div>
 
-<div>
-<span id="unitUsername"></span>
-</div>
-</legend>
+                    <div>
+                        <span id="unitUsername"></span>
+                    </div>
+                </legend>
 
-<ul class='unitLanes' style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
-<table class="table table-striped table-condensed table-hover">
-<thead>
-<th class="line"></th>
-<th class="ticket"></th>
-<th class="start"></th>
-<th class="end"></th>
-<th class="mark"></th>
-</thead>
-<tbody>
+                <ul class='unitLanes' style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
+                <table class="table table-striped table-condensed table-hover">
+                    <thead>
+                        <th class="line"></th>
+                        <th class="ticket"></th>
+                        <th class="start"></th>
+                        <th class="end"></th>
+                        <th class="mark"></th>
+                    </thead>
+                    <tbody>
 
-</tbody>
-</table>
-</fieldset>
-</form>
-</div>
+                    </tbody>
+                </table>
+            </fieldset>
+        </form>
+    </div>
 </div>
 
 <div class="reveal-modal" id="laneModal">
-<div class="modal-header">
-<a class="close-reveal-modal">&#215;</a>
-<h3 id="history"></h3>
-</div>
-<div class="modal-body">
-<form class="form-horizontal">
-<fieldset>
-<legend style="margin-bottom: 13px;">
-<div>
-<span id="laneName"></span>
-</div>
-</legend>
+    <div class="modal-header">
+        <a class="close-reveal-modal">&#215;</a>
+        <h3 id="history"></h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <legend style="margin-bottom: 13px;">
+                    <div>
+                        <span id="laneName"></span>
+                    </div>
+                </legend>
 
 
-<ul class='unitLanes' style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
-<table class="table table-striped table-condensed table-hover">
-<thead>
-<th class="operator"></th>
-<th class="ticket"></th>
-<th class="start"></th>
-<th class="end"></th>
-<th class="mark"></th>
-</thead>
-<tbody>
+                <ul class='unitLanes' style="list-style-type: none; margin-left: 0px; margin-bottom: 15px;"></ul>
+                <table class="table table-striped table-condensed table-hover">
+                    <thead>
+                        <th class="operator"></th>
+                        <th class="ticket"></th>
+                        <th class="start"></th>
+                        <th class="end"></th>
+                        <th class="mark"></th>
+                    </thead>
+                    <tbody>
 
-</tbody>
-</table>
-</fieldset>
-</form>
-</div>
+                    </tbody>
+                </table>
+            </fieldset>
+        </form>
+    </div>
 </div>
 
 <div id="message" class="reveal-modal">
-  <div class="modal-header">
-    <a class="close-reveal-modal">&#215;</a>
-    <h3 class="settings"></h3>
-  </div>
-  <div id="messageBody" class="modal-body"></div>
-  <div class="modal-footer">
-  	<div class="pull-left">
-    	<a href="#" id="change_lang" class="btn" onclick="change_lang();" data-dismiss="modal">OK</a>
-  	</div>
-  </div>
+    <div class="modal-header">
+        <a class="close-reveal-modal">&#215;</a>
+        <h3 class="settings"></h3>
+    </div>
+    <div id="messageBody" class="modal-body"></div>
+    <div class="modal-footer">
+        <div class="pull-left">
+            <a href="#" id="change_lang" class="btn" onclick="change_lang();" data-dismiss="modal">OK</a>
+        </div>
+    </div>
 </div>
 
-  <script src="javascripts/vendor/custom.modernizr.js"></script>
-  <script src="javascripts/foundation/foundation.js"></script>
-  
-  <script src="javascripts/foundation/foundation.topbar.js"></script>
-  <script src="javascripts/foundation/foundation.datepicker.min.js"></script>
-  <script src="javascripts/foundation/foundation.dropdown.js"></script>
-  <script src="javascripts/foundation/foundation.reveal.js"></script>
-  <script src="javascripts/foundation/foundation.section.js"></script>
-  <script src="javascripts/foundation/foundation.tooltips.js"></script>
-  
-  
-  <script>
-    $(document).foundation();
-  </script>
-  <script src="javascripts/monitor2.min.js">></script>
-	<script src="javascripts/FileSaver.min.js"></script>
-  
+<script src="javascripts/vendor/custom.modernizr.js"></script>
+<script src="javascripts/foundation/foundation.js"></script>
+
+<script src="javascripts/foundation/foundation.topbar.js"></script>
+<script src="javascripts/foundation/foundation.datepicker.min.js"></script>
+<script src="javascripts/foundation/foundation.dropdown.js"></script>
+<script src="javascripts/foundation/foundation.reveal.js"></script>
+<script src="javascripts/foundation/foundation.section.js"></script>
+<script src="javascripts/foundation/foundation.tooltips.js"></script>
+
+
+<script>
+$(document).foundation();
+</script>
+<script src="javascripts/monitor2.min.js">
+>
+</script>
+<script src="javascripts/FileSaver.min.js"></script>

@@ -135,7 +135,7 @@
                     //_template = html;
                     //var translated = Mustache.render(_template, _ru);
                     //jQuery("#body").html(translated);
-                    console.log(msg);
+//                    console.log(msg);
                     
                     if(typeof _init=="function"){
                         console.log('_initStarted');

@@ -38,6 +38,7 @@ public class QueueWrapper{
 	}
 	
 	public Ticket enqueue(Group group, String clientId, List<String> laneNames, String language) throws QueuePluginException {
+		QLog.info("started");
 		if(group==null){
 			throw new QueuePluginException("wrapper.group.notfound");
 		}
@@ -116,42 +117,52 @@ public class QueueWrapper{
 		Reservation.processTicket(ticket,em); // open or closed
 		for (Token toke: ticket.getTokenList())
 			QLog.info("ticket token laneName " + toke.getLaneName() + " priority " + toke.getPriority());
+		QLog.info("end");
 		return ticket;
 	}
 	
 	/**Requires active transaction*/
 	public Token call(Unit unit) throws QueuePluginException{
+		QLog.info("started");
 		if(unit==null){
 			throw new QueuePluginException("wrapper.unit.notfound");
 		}
+		QLog.info("end");
 		return queue.call(unit);
 	}
 	
 	public Token recall(final Long tokenId, final String groupName) throws QueuePluginException {
+		QLog.info("started");
 		Token token = em.find(Token.class,tokenId);
 		if(!token.getTicket().getGroup().getName().equalsIgnoreCase(groupName)){
 			throw new QueuePluginException("wrapper.restrict.group");
 		}	
+		QLog.info("end");
 		return queue.recall(token);
 	}
 	
 	/**Requires active transaction*/
 	public Token start(Unit unit) throws QueuePluginException{
+		QLog.info("started");
 		if(unit==null){
 			throw new QueuePluginException("wrapper.unit.notfound");
 		}
+		QLog.info("end");
 		return queue.start(unit);
 	}
 	
 	/**Requires active transaction*/
 	public Token advertisement(Unit unit) throws QueuePluginException{
+		QLog.info("started");
 		if(unit==null){
 			throw new QueuePluginException("wrapper.unit.notfound");
 		}
+		QLog.info("end");
 		return queue.advertisement(unit);
 	}
 	
 	public Token postpone(final String unitname) throws QueuePluginException {
+		QLog.info("started");
 		List<Token> tokenList = em.createQuery("from Token t join fetch t.ticket tt" +
 				" where" +
 				" 	t.status in('RECALLED','CALLED','STARTED')" +
@@ -160,14 +171,17 @@ public class QueueWrapper{
 		if(tokenList.isEmpty()){
 			throw new QueuePluginException("postpone.no.token");
 		}
+		QLog.info("end");
 		return queue.postpone(tokenList.get(0));
 	}
 	
 	/**Requires active transaction*/
 	public Token end(Unit unit) throws QueuePluginException{
+		QLog.info("started");
 		if(unit==null){
 			throw new QueuePluginException("wrapper.unit.notfound");
 		}
+		QLog.info("end");
 		return queue.end(unit);
 	}
 	
@@ -177,16 +191,17 @@ public class QueueWrapper{
 	}
 	
 	public List<Lane> getLanes(final String groupName){
-		System.out.println("-------------------------------------------------2");
+		QLog.info("started");
+//		System.out.println("-------------------------------------------------2");
 		List<Lane> lanes= em.createQuery("from Lane l" +
 				" where" +
 				" 	l.group.id=:groupName" +
 				" 	and l.status='ENABLED' order by username")
 			.setParameter("groupName",groupName).getResultList();
-		for(Lane l:lanes){
-			System.out.println(l.getUsername());
-		}
-		System.out.println("------------------------------------------------------3");
+//		for(Lane l:lanes){
+//			System.out.println(l.getUsername());
+//		}
+		QLog.info("end");
 		return lanes;
 	}
 	
@@ -225,6 +240,7 @@ public class QueueWrapper{
 	}
 
 	public Token transfer(final Long tokenId,String laneName, final String destination, final String groupName,String radioButton,boolean returnToken) throws QueuePluginException {
+		QLog.info("started");
 		Token token = em.find(Token.class,tokenId);
 		if(token==null){
 			throw new QueuePluginException("wrapper.token.notfound");
@@ -236,6 +252,7 @@ public class QueueWrapper{
 		if(destination!=null){
 			user = em.find(User.class, destination);
 		}
+		QLog.info("end");
 		return queue.transfer(token,laneName,user,radioButton,returnToken);
 	}
 	

@@ -1,54 +1,53 @@
-    <link href='stylesheets/screen.css' media='print,screen' rel='stylesheet'>
-    <link href='stylesheets/kiosk.css' media='print,screen' rel='stylesheet'>
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-    
-    <div class="print-page" style="color:black; width:350px;">
-     <center>
+<link href='stylesheets/screen.css' media='print,screen' rel='stylesheet'>
+<link href='stylesheets/kiosk.css' media='print,screen' rel='stylesheet'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+<div class="print-page" style="color:black; width:350px;">
+    <center>
         <img id="printLogo" src="images/logo/logo_black.png" style="width: 60%;height:60%;">
         <p id="ticketCode" style="margin:0 auto; font-size: 90px; margin-bottom: 13px;"></p>
-      </center>
-      <ul>
+    </center>
+    <ul>
         <li style="line-height: 150%;font-size: 20px; margin-left: 12px;">
-          <b style="margin-left: -120px;" id="ticketCreateDateMessage"></b>
-          <span id="ticketCreateDate"></span>
+            <b style="margin-left: -120px;" id="ticketCreateDateMessage"></b>
+            <span id="ticketCreateDate"></span>
         </li>
-        <li style="line-height: 150%; margin-left: -97px; font-size: 25px;text-align: left;">         
-          <strong id="laneTypesMessage"></strong>
-          <span id="laneTypes"></span>
+        <li style="line-height: 150%; margin-left: -97px; font-size: 25px;text-align: left;">
+            <strong id="laneTypesMessage"></strong>
+            <span id="laneTypes"></span>
         </li>
-      </ul>
-      <div style="line-height: 100%;" align="center">
+    </ul>
+    <div style="line-height: 100%;" align="center">
         <b style="font-size: 20px; line-height: 80%;" id="waitingClientsPrintMessage"></b>
-      </div>
     </div>
-    
-    <div class='containerKiosk'>
-      <div class='logo' id='Logo' style="margin: 0 auto;"></div>
-      <div class='controls'>
+</div>
+
+<div class='containerKiosk'>
+    <div class='logo' id='Logo' style="margin: 0 auto;"></div>
+    <div class='controls'>
         <div id='kiosk-step-1'>
-          <h5 class='title language-chooser-title'></h5>
-          <div class='kiosk' style="width:800px;">
-            <a class='kiosk-link' href='#' id='kk-lang'>
-              <span>
-                Қазақша
-              </span>
-            </a>
-            <a class='kiosk-link' href='#' id='ru-lang'>
-              <span>
-                Русский
-              </span>
-            </a>
-          </div>
+            <h5 class='title language-chooser-title'></h5>
+            <div class='kiosk' style="width:800px;">
+                <a class='kiosk-link' href='#' id='kk-lang'>
+                    <span>
+                        Қазақша
+                    </span>
+                </a>
+                <a class='kiosk-link' href='#' id='ru-lang'>
+                    <span>
+                        Русский
+                    </span>
+                </a>
+            </div>
         </div>
 
         <div id='kiosk-step-3'>
-          <a href='#' id='back-to-step-1' onClick="clearActiveLanes();">
-            <div class='back ui-back'></div>
-          </a>
-          <ul id='kiosk-services'>
-          </ul>
+            <a href='#' id='back-to-step-1' onClick="clearAll();">
+                <div class='back ui-back'></div>
+            </a>
+            <ul id='kiosk-services'>
+            </ul>
         </div>
-      </div>
     </div>
-  <script src='javascripts/kiosk.js'></script>      
-  
+</div>
+<script src='javascripts/kiosk.js'></script>

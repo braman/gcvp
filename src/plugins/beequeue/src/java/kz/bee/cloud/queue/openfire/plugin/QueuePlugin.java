@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,58 +44,66 @@ import org.jivesoftware.openfire.interceptor.PacketInterceptor;
 import org.jivesoftware.openfire.pubsub.PubSubModule;
 import org.jivesoftware.util.JiveGlobals;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 public class QueuePlugin implements Plugin {
-	
+
 	private InterceptorManager interceptorManager;
 	private PacketInterceptor messageInterceptor;
 	private PubSubModule pubsub;
-	
+
 	public void initializePlugin(PluginManager manager, File pluginDirectory) {
 		long start = System.currentTimeMillis();
-		JiveGlobals.setProperty("xmpp.pubsub.service","cqpubsub");
-		
+		JiveGlobals.setProperty("xmpp.pubsub.service", "cqpubsub");
+
 		QLog.info("Bee Q plugin initialize begin");
-		/*******************DEBUG start*******************/
+		/******************* DEBUG start *******************/
 		boolean debug = false;
-		if(debug){
-			Map<String,String> map = new HashMap<String,String>();
-//			map.put("hibernate.show_sql", "true");
+		if (debug) {
+			Map<String, String> map = new HashMap<String, String>();
+			// map.put("hibernate.show_sql", "true");
 			map.put("hibernate.hbm2ddl.auto", "create");
-			DBManager.init(map);	
-		}else{
+			DBManager.init(map);
+		} else {
 			DBManager.init();
 		}
-		
+
 		Messenger.init();
-		
+
 		AuthCheckFilter.addExclude("gcvp/reservation");
 		AuthCheckFilter.addExclude("gcvp/mobile");
-		
+
 		pubsub = new PubSubModule();
 		pubsub.initialize(XMPPServer.getInstance());
 		pubsub.start();
-		if(debug){
+		if (debug) {
 			try {
-				new Work<Object>(){
+				new Work<Object>() {
 					@Override
-					protected Object work(EntityManager em) throws QueuePluginException {
-						em.createNativeQuery("delete from ofpubsubaffiliation;delete from ofpubsubitem;delete from ofpubsubnode;delete from ofpubsubsubscription;").executeUpdate();
+					protected Object work(EntityManager em)
+							throws QueuePluginException {
+						em.createNativeQuery(
+								"delete from ofpubsubaffiliation;delete from ofpubsubitem;delete from ofpubsubnode;delete from ofpubsubsubscription;")
+								.executeUpdate();
 						return null;
 					}
 				}.workInTransaction();
 				insertInitialData(pluginDirectory.getAbsolutePath());
-				//insertMessages();
+				// insertMessages();
 			} catch (QueuePluginException e1) {
 				e1.printStackTrace();
-			}	
+			}
 		}
-		/*******************DEBUG end*********************/
-		
-//		DBManager.init();//db & hibernate manager
-//		Messenger.init();//messenger (message routing)
+		/******************* DEBUG end *********************/
+
+		// DBManager.init();//db & hibernate manager
+		// Messenger.init();//messenger (message routing)
 		QLog.info("Main components started");
-		
-		Messages.loadMessages();//i18n
+
+		Messages.loadMessages();// i18n
 		messageInterceptor = new QueueInterceptor();
 		interceptorManager = InterceptorManager.getInstance();
 		interceptorManager.addInterceptor(messageInterceptor);
@@ -102,7 +111,8 @@ public class QueuePlugin implements Plugin {
 		QLog.debug("DEBUG level");
 		QLog.info("INFO level:");
 		QLog.warn("WARN level");
-		System.out.println("Bee Q plugin initialized in: "+(end-start)+" ms");
+		System.out.println("Bee Q plugin initialized in: " + (end - start)
+				+ " ms");
 	}
 
 	public void destroyPlugin() {
@@ -112,7 +122,7 @@ public class QueuePlugin implements Plugin {
 		interceptorManager.removeInterceptor(messageInterceptor);
 		System.out.println("Bee Q plugin destroyed");
 	}
-	
+
 	public static void insertInitialData(String path) throws QueuePluginException{
 		final String spank = path.replace("plugins/beequeue", "resources/spank");
 		EntityManager em = DBManager.newEm();
@@ -298,7 +308,50 @@ public class QueuePlugin implements Plugin {
 					"19.Зейнет жасына толған адамдарға зейнетақы жарналарының айналымдарын, әлеуметтік аударымдар бойынша үзінді-көшірмесін беру- Нақты белгілі бір терезеге жолдау ",
 					"20.Әр түрлi сұрақтар бойынша  консультация алу"
 				};
-				
+				String lane1[]={
+						"fils01a01",
+						"fils01a02",
+						"fils01a03",
+						"fils01a04",
+						"fils01a05",
+						"fils01a06",
+						"fils01a07",
+						"fils01a08",
+						"fils01a09",
+						"fils01a10",
+						"fils01a11",
+						"fils01a12",
+						"fils01a13",
+						"fils01a14",
+						"fils01a15",
+						"fils01a16",
+						"fils01a17",
+						"fils01a18",
+						"fils01a19",
+						"fils01a20",
+				}; 
+				String lane2[]={
+						"a-b",
+						"c-d",
+						"a-b",
+						"c-d",
+						"a-b",
+						"c-d",
+						"a-b",
+						"c-d",
+						"a-b",
+						"c-d",
+						"a-b",
+						"c-d",
+						"a-b",
+						"c-d",
+						"a-b",
+						"c-d",
+						"a-b",
+						"c-d",
+						"a-b",
+						"c-d",
+				};
 				List<Integer> dashs = new ArrayList<Integer>();
 				dashs.add(3);
 				dashs.add(3);
@@ -317,10 +370,12 @@ public class QueuePlugin implements Plugin {
 				dashs.add(4);
 				dashs.add(3);
 				dashs.add(3);
+				
 				em.getTransaction().commit();
 				for(int j=0;j<fils.size();j++){
 					Set<Lane> laneAll = new HashSet<Lane>();
-					//if (fils.get(j)!=fil1){
+					String str="";
+//					if (!fils.get(j).equals(fil1)){
 						int start = 1;
 						int end = 999/as1.length;
 						for(int i=1;i<=as1.length;i++){
@@ -371,7 +426,74 @@ public class QueuePlugin implements Plugin {
 							em.getTransaction().commit();
 						}
 //					}else{
-//						
+//						int start = 1;
+//						int end = 999/as1.length;
+//						for(int i=1;i<=lane1.length;i++){
+//							em.getTransaction().begin();
+//							Lane l1 = new Lane();
+//							l1.setGroup(fils.get(j));
+//							if((j+1)<10){
+//								if(i<10){
+//									l1.setUsername("fils0"+(j+1)+"a0"+i);
+//								}else{
+//									l1.setUsername("fils0"+(j+1)+"a"+i);
+//								}
+//							}else{
+//								if(i<10){
+//									l1.setUsername("fils"+(j+1)+"a0"+i);
+//								}else{
+//									l1.setUsername("fils"+(j+1)+"a"+i);
+//								}
+//							}
+//							
+//							if(start<10){
+//								l1.setRangeStart("00"+start);
+//							}else if(start<100){
+//								l1.setRangeStart("0"+start);
+//							}else{
+//								l1.setRangeStart(""+start);
+//							}
+//							if(end<100){
+//								l1.setRangeEnd("0"+end);
+//							}else{
+//								l1.setRangeEnd(""+end);
+//							}
+//							em.persist(l1);
+//							BundleMessage messageR = new BundleMessage();
+//							messageR.setKey(String.format("lane.%s.name",l1.getUsername()));
+//							messageR.setLang(Language.RU);
+//							messageR.setValue(lane2[i-1]);
+//							em.persist(messageR);
+//							
+//							BundleMessage messageK = new BundleMessage();
+//							messageK.setKey(String.format("lane.%s.name",l1.getUsername()));
+//							messageK.setLang(Language.KK);
+//							messageK.setValue(lane2[i-1]);
+//							em.persist(messageK);
+//							start = end+1;
+//							end = end+999/lane1.length;
+//							laneAll.add(l1);
+//							em.getTransaction().commit();
+//						}
+//						str = "[{";
+//						for(int i=0;i<as1.length;i++){
+//							String lanes = "[";
+//							if(fils.get(j).equals(fil1)){
+//								for(int k=0;k<lane1.length;k++){
+//									lanes+="\""+lane1[k]+"\"";
+//									if(k!=lane1.length-1){
+//										lanes+=",";
+//									}
+//								}
+//							}
+//							lanes+="]";
+//							str+="\"kk\":\""+as2[i]+"\",\"ru\":\""+as1[i]+"\",\"sublanes\":"+lanes+",\"id\":"+(i+1);
+//							if(i != as1.length-1){
+//								str+="},{";
+//							}
+//						}
+//						str+="}]";
+//					
 //					}
 					
 					em.getTransaction().begin();
@@ -379,6 +501,10 @@ public class QueuePlugin implements Plugin {
 					gcvpKiosk1.setRole(Role.KIOSK);
 					gcvpKiosk1.setGroup(fils.get(j));
 					gcvpKiosk1.setUsername("kiosk"+(j+1));
+					if(!str.equals("")){
+						gcvpKiosk1.setData(str);
+						str="";
+					}
 					try {
 						gcvpKiosk1.setPasswordSalt(HashUtils.getSaltString());
 						gcvpKiosk1.setPasswordHash(HashUtils.getHashString("q", gcvpKiosk1.getPasswordSalt()));
@@ -433,7 +559,7 @@ public class QueuePlugin implements Plugin {
 							gcvpunit1.setWindow(""+i);
 						}
 						gcvpunit1.setLanes(laneAll);
-						gcvpunit1.setMonitorUnit(mu1);		
+						gcvpunit1.setMonitorUnit(mu1);
 						try {
 							gcvpunit1.setPasswordSalt(HashUtils.getSaltString());
 							gcvpunit1.setPasswordHash(HashUtils.getHashString("q", gcvpunit1.getPasswordSalt()));
@@ -444,7 +570,7 @@ public class QueuePlugin implements Plugin {
 						em.getTransaction().commit();
 					}
 					em.getTransaction().begin();
-					for(int i=1;i<=dashs.get(i);i++){
+					for(int i=1;i<=dashs.size();i++){
 						int s = j+1;
 						Dashboard beelineDash = new Dashboard();
 						if(s<10){
@@ -484,7 +610,7 @@ public class QueuePlugin implements Plugin {
 					}
 					unitSc.close();
 					
-					File dashFile = new File(spank+"/dashboard.html");
+					File dashFile = new File(spank+"/dashboard2.html");
 					Scanner dashSc = new Scanner(dashFile,"UTF-8");
 					String dashHtml = "";
 					while(dashSc.hasNextLine()){
@@ -517,64 +643,64 @@ public class QueuePlugin implements Plugin {
 				}
 				em.getTransaction().commit();
 	}
-	
-	public static void insertMessages() throws QueuePluginException{
+
+	public static void insertMessages() throws QueuePluginException {
 		new Work<Object>() {
 			@Override
 			protected Object work(EntityManager em) {
-				Map<String,String> map = new HashMap<String,String>();
-				map.put("group.gcvp.name","gcvp");
-				map.put("group.gcvp.shortname","gcvp");
-				map.put("lane.a.name","Документирование");
-				map.put("lane.b.name","Выдача готовых документов");
-				map.put("lane.c.name","Касса");
-				map.put("lane.d.name","Операционный зал");
-				map.put("lane.e.name","Выдача кредитов");
-				map.put("lane.f.name","Операции с карточками");
-				map.put("lane.g.name","Платежи");
-				
-				map.put("token.status.waiting","Клиент ожидает");
-				map.put("token.status.called","Клиент вызван");
-				map.put("token.status.started","Обслуживание");
-				map.put("token.status.ended","Обслуживание завершено");
-				map.put("token.status.postponed","Отложен");
-				map.put("token.status.missed","Клиент не пришел");
-				map.put("token.status.transferred","Клиент перенаправлен");
-				
-				for(Entry<String,String> entry:map.entrySet()){
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("group.gcvp.name", "gcvp");
+				map.put("group.gcvp.shortname", "gcvp");
+				map.put("lane.a.name", "Документирование");
+				map.put("lane.b.name", "Выдача готовых документов");
+				map.put("lane.c.name", "Касса");
+				map.put("lane.d.name", "Операционный зал");
+				map.put("lane.e.name", "Выдача кредитов");
+				map.put("lane.f.name", "Операции с карточками");
+				map.put("lane.g.name", "Платежи");
+
+				map.put("token.status.waiting", "Клиент ожидает");
+				map.put("token.status.called", "Клиент вызван");
+				map.put("token.status.started", "Обслуживание");
+				map.put("token.status.ended", "Обслуживание завершено");
+				map.put("token.status.postponed", "Отложен");
+				map.put("token.status.missed", "Клиент не пришел");
+				map.put("token.status.transferred", "Клиент перенаправлен");
+
+				for (Entry<String, String> entry : map.entrySet()) {
 					BundleMessage message = new BundleMessage();
 					message.setKey(entry.getKey());
 					message.setValue(entry.getValue());
 					em.persist(message);
 				}
-				
-				Map<String,String> map_en = new HashMap<String,String>();
-				map_en.put("lane.a.name","Documents");
-				map_en.put("lane.b.name","Issuance of final documents");
-				map_en.put("lane.c.name","Cash");
-				map_en.put("lane.d.name","Операционный зал");
-				map_en.put("lane.e.name","Выдача кредитов");
-				map_en.put("lane.f.name","Operations");
-				map_en.put("lane.g.name","Payments");
-				
-				for(Entry<String,String> entry:map_en.entrySet()){
+
+				Map<String, String> map_en = new HashMap<String, String>();
+				map_en.put("lane.a.name", "Documents");
+				map_en.put("lane.b.name", "Issuance of final documents");
+				map_en.put("lane.c.name", "Cash");
+				map_en.put("lane.d.name", "Операционный зал");
+				map_en.put("lane.e.name", "Выдача кредитов");
+				map_en.put("lane.f.name", "Operations");
+				map_en.put("lane.g.name", "Payments");
+
+				for (Entry<String, String> entry : map_en.entrySet()) {
 					BundleMessage message = new BundleMessage();
 					message.setKey(entry.getKey());
 					message.setValue(entry.getValue());
 					message.setLang(Language.EN);
 					em.persist(message);
 				}
-				
-				Map<String,String> map_kz = new HashMap<String,String>();
-				map_kz.put("lane.a.name","Құжаттау");
-				map_kz.put("lane.b.name","Даяр құжаттарды беру");
-				map_kz.put("lane.c.name","Касса");
-				map_kz.put("lane.d.name","Операциялық зал");
-				map_kz.put("lane.e.name","Выдача кредитов");
-				map_kz.put("lane.f.name","Операции с карточками");
-				map_kz.put("lane.g.name","Төлеулер");
-				
-				for(Entry<String,String> entry:map_kz.entrySet()){
+
+				Map<String, String> map_kz = new HashMap<String, String>();
+				map_kz.put("lane.a.name", "Құжаттау");
+				map_kz.put("lane.b.name", "Даяр құжаттарды беру");
+				map_kz.put("lane.c.name", "Касса");
+				map_kz.put("lane.d.name", "Операциялық зал");
+				map_kz.put("lane.e.name", "Выдача кредитов");
+				map_kz.put("lane.f.name", "Операции с карточками");
+				map_kz.put("lane.g.name", "Төлеулер");
+
+				for (Entry<String, String> entry : map_kz.entrySet()) {
 					BundleMessage message = new BundleMessage();
 					message.setKey(entry.getKey());
 					message.setValue(entry.getValue());

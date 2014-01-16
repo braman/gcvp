@@ -19,6 +19,7 @@ import kz.bee.cloud.queue.model.Token;
 import kz.bee.cloud.queue.model.Token.Status;
 import kz.bee.cloud.queue.model.Unit;
 import kz.bee.cloud.queue.model.User;
+import kz.bee.util.QLog;
 
 @SuppressWarnings("unchecked")
 public class CloudQueue implements Queue {
@@ -33,6 +34,7 @@ public class CloudQueue implements Queue {
 	
 	@Override
 	public Token call(Unit unit) {
+		QLog.info("started");
 		em.find(Group.class, unit.getGroup().getName(), LockModeType.PESSIMISTIC_WRITE);
 		
 		Token token = null;
@@ -95,12 +97,14 @@ public class CloudQueue implements Queue {
 		}else {
 			Messenger.fire(unit,em);
 		}
+		QLog.info("end");
 		return token;
 	}
 
 	//TODO check if unit has such lane
 	@Override
 	public Token call(Unit unit, Lane lane) {
+		QLog.info("started");
 		em.find(Group.class, unit.getGroup().getName(), LockModeType.PESSIMISTIC_WRITE);
 		
 		Token token = null;
@@ -163,11 +167,13 @@ public class CloudQueue implements Queue {
 		}else {
 			Messenger.fire(unit,em);
 		}
+		QLog.info("end");
 		return token;
 	}
 	
 	@Override
 	public Token start(Unit unit) {
+		QLog.info("started");
 		Token token = null;
 		Date currentDate = Calendar.getInstance().getTime();
 		List<Token> tokenList = em.createQuery(
@@ -191,11 +197,13 @@ public class CloudQueue implements Queue {
 		if(token!=null){
 			token.getTicket().setStatus(Ticket.Status.BUSY);	
 		}
+		QLog.info("end");
 		return token;
 	}
 	
 	@Override
 	public Token advertisement(Unit unit) {
+		QLog.info("started");
 		Token token = null;
 		List<Token> tokenList = em.createQuery(
 			"from " +
@@ -213,9 +221,11 @@ public class CloudQueue implements Queue {
 			token = t;
 			Messenger.fire(t,em);
 		}
+		QLog.info("end");
 		return token;
 	}
 	public Token back(Unit unit) {
+		QLog.info("started");
 		Token token = null;
 		List<Token> tokenList = em.createQuery(
 			"from " +
@@ -243,10 +253,12 @@ public class CloudQueue implements Queue {
 			token.setTarget(lane);
 			Messenger.fire(token,em);
 		}
+		QLog.info("end");
 		return token;
 	}
 	@Override
 	public Token end(Unit unit) {
+		QLog.info("started");
 		Token token = null;
 		Date currentDate = Calendar.getInstance().getTime();
 		// End all started tokens
@@ -306,14 +318,14 @@ public class CloudQueue implements Queue {
 		if(token==null){
 			return null;
 		}
-		
+		QLog.info("end");
 		return token;
 	}
 
 	@Override
 	public Token current(Unit unit) {
 		Token token = null;
-		
+		QLog.info("started");
 		List<Token> tokenList = em.createQuery(
 			"from " +
 			"	Token t join fetch t.ticket tt " +
@@ -333,6 +345,7 @@ public class CloudQueue implements Queue {
 		if(tokenList.size() > 0){
 			token = tokenList.get(0);
 		}
+		QLog.info("end");
 		return token;
 	}
 
@@ -342,9 +355,11 @@ public class CloudQueue implements Queue {
 	
 	@Override
 	public Ticket enqueue(Group group, String personalId, List<Lane> lanes, User.Language lang,int priority) {
+		QLog.info("started");
 		Ticket ticket = createTicket(group, personalId, lanes, lang, priority);
 		em.persist(ticket);
 		Messenger.fire(ticket,em);
+		QLog.info("end");
 		return ticket;
 	}
 
@@ -354,7 +369,8 @@ public class CloudQueue implements Queue {
 	}
 	
     public Ticket createTicket(Group group, String personalId, List<Lane> lanes, User.Language lang,int priority) {
-		Date create = Calendar.getInstance().getTime();
+    	QLog.info("started");
+    	Date create = Calendar.getInstance().getTime();
 		
 		List<Lane> finalLaneList = new ArrayList<Lane>();
 		finalLaneList.addAll(lanes);
@@ -395,12 +411,13 @@ public class CloudQueue implements Queue {
 			ticket.getTokens().put(lane,token);
 			token_priority++;			
 		}
-		
+		QLog.info("end");
 		return ticket;
 	}
 	
 	private String generateTicketCode(Group group, Lane lane) {
 //		 Lock the counter
+		QLog.info("started");
 		lane = em.find(Lane.class, lane.getUsername(),LockModeType.PESSIMISTIC_WRITE);
 		int startRange = 0, endRange = 999;
 		// Trying to get ranges from lane
@@ -432,6 +449,7 @@ public class CloudQueue implements Queue {
 		}
 		lane.setCountDate(currentDateCld.getTime());		
 		lane.setCount(value);
+		QLog.info("end");
 		return nf.format(lane.getCount());
 	}
 	
@@ -440,6 +458,7 @@ public class CloudQueue implements Queue {
 	 * */
 	@Override
 	public Integer getTokenCount(Unit unit, Status ... statuses) {
+		QLog.info("started");
 		List<Status> statusList = Arrays.asList(statuses);
 		if(statusList.size()==0){
 			statusList.add(Status.WAITING);
@@ -459,6 +478,7 @@ public class CloudQueue implements Queue {
 				.setParameter("statuses",statusList)
 				.setParameter("lanes", unit.getLanes())
 				.getSingleResult();
+		QLog.info("end");
 		return count.intValue();
 	}
 	
@@ -474,6 +494,7 @@ public class CloudQueue implements Queue {
 
 	@Override
 	public Token transfer(Token token,String laneName, User target,String radioButton,boolean returnToken) {
+		QLog.info("started");
 		em.find(Group.class, token.getTicket().getGroup().getName(), LockModeType.PESSIMISTIC_WRITE);
 		
 		Date now = new Date();
@@ -537,28 +558,34 @@ public class CloudQueue implements Queue {
 		}
 		System.out.println(nextToken.getCreate()+"1---------------------------------------");
 		Messenger.fire(nextToken,em);
+		QLog.info("end");
 		return nextToken;
 	}
 
 	@Override
 	public Token postpone(Token token) {
+		QLog.info("started");
 		token.setStatus(Status.POSTPONED);
 		token.setPostpone(new Date());
 		
 		Messenger.fire(token,em);
+		QLog.info("end");
 		return token;
 	}
 
 	@Override
 	public Token recall(Token token) {
+		QLog.info("started");
 		em.find(Group.class, token.getTicket().getGroup().getName(), LockModeType.PESSIMISTIC_WRITE);
 		token.setStatus(Status.RECALLED);
 		token.setPostpone(null);
 		Messenger.fire(token,em);
+		QLog.info("end");
 		return token;
 	}
 
 	public Token callByToken(Unit unit, Token token) {
+		QLog.info("started");
 		em.find(Group.class, unit.getGroup().getName(), LockModeType.PESSIMISTIC_WRITE);
 		
 		if(token != null){
@@ -570,6 +597,7 @@ public class CloudQueue implements Queue {
 		}else {
 			Messenger.fire(unit,em);
 		}
+		QLog.info("end");
 		return token;
 	}
 }

@@ -89,16 +89,20 @@ public class Messenger {
 	 * Sends message to given JID from queue
 	 * */
 	public void sendMessage(String text, JID jid) {
+		QLog.info("start");
 		Message message = new Message();
 		message.setType(Type.chat);
 		message.setFrom(Constants.QUEUE);
 		message.setTo(jid);
 		message.setBody(text);
 		XMPPServer.getInstance().getMessageRouter().route(message);
+		QLog.info("end");
 	}
 
 	public void sendMessage(String text, String jid) {
+		QLog.info("start");
 		sendMessage(text, new JID(jid));
+		QLog.info("end");
 	}
 
 	public boolean checkTwoHours(String date, String time) {
@@ -227,6 +231,7 @@ public class Messenger {
 	}
 
 	public ArrayNode getLanes(String groupName) {
+		QLog.info("started");
 		EntityManager em = DBManager.newEm();
 		em.getTransaction().begin();
 		ArrayNode arrayNode = mapper.createArrayNode();
@@ -263,7 +268,7 @@ public class Messenger {
 			em.getTransaction().rollback();
 		}
 		em.close();
-
+		QLog.info("end");
 		return arrayNode;
 	}
 
@@ -351,6 +356,7 @@ public class Messenger {
 	}
 
 	public ArrayNode getGroups() {
+		QLog.info("started");
 		EntityManager em = DBManager.newEm();
 		em.getTransaction().begin();
 		ArrayNode arrayNode = mapper.createArrayNode();
@@ -372,12 +378,13 @@ public class Messenger {
 			em.getTransaction().rollback();
 		}
 		em.close();
-
+		QLog.info("end");
 		return arrayNode;
 	}
 
 	private void seMonitorTicket(Token token) throws JsonGenerationException,
 			JsonMappingException, IOException {
+		QLog.info("started");
 		ObjectNode resultNode = mapper.createObjectNode();
 
 		ObjectNode ticketNode = mapper.createObjectNode();
@@ -395,11 +402,13 @@ public class Messenger {
 		// String jid1 = u.getMonitorUnitDemo().getUsername()+"@cq.b2e.kz";
 
 		sendMessage(message, jid);
+		QLog.info("end");
 		// sendMessage(message, jid1);
 	}
 
 	private void seMonitorRefresh(Token token) throws JsonGenerationException,
 			JsonMappingException, IOException {
+		QLog.info("started");
 		ObjectNode resultNode = mapper.createObjectNode();
 		resultNode.put("refresh", true);
 		String message = mapper.writeValueAsString(resultNode);
@@ -411,6 +420,7 @@ public class Messenger {
 		// String jid1 = u.getMonitorUnitDemo().getUsername()+"@cq.b2e.kz";
 
 		sendMessage(message, jid);
+		QLog.info("end");
 		// sendMessage(message, jid1);
 	}
 
@@ -476,6 +486,7 @@ public class Messenger {
 
 	private void seMonitorBack(Unit u) throws JsonGenerationException,
 			JsonMappingException, IOException {
+		QLog.info("start");
 		ObjectNode resultNode = mapper.createObjectNode();
 		resultNode.put("back", true);
 		String message = mapper.writeValueAsString(resultNode);
@@ -486,6 +497,7 @@ public class Messenger {
 		// String jid1 = u.getMonitorUnitDemo().getUsername()+"@cq.b2e.kz";
 
 		sendMessage(message, jid);
+		QLog.info("end");
 		// sendMessage(message, jid1);
 	}
 
@@ -1304,6 +1316,7 @@ public class Messenger {
 	}
 
 	private ObjectNode token2JSON(Token token, Language lang) {
+		QLog.info("start");
 		ObjectNode tokenNode = mapper.createObjectNode();
 		tokenNode.put("ticket", token.getTicket().getCode());
 		tokenNode.put("id", token.getId());
@@ -1323,12 +1336,13 @@ public class Messenger {
 		else if (lang == Language.EN)
 			tokenNode.put("laneText",
 					Messages.get("lane.#0.name_EN", token.getLaneName()));
-
+		QLog.info("end");
 		return tokenNode;
 	}
 
 	public void publish(String nodeName, ObjectNode jsonNode)
 			throws JsonGenerationException, JsonMappingException, IOException {
+		QLog.info("start");
 		jsonNode.put("pubsub", true);
 		String jsonStr = mapper.writeValueAsString(jsonNode);
 		System.out.println("nodeName " + nodeName);
@@ -1346,9 +1360,11 @@ public class Messenger {
 		System.out.println("MSG: " + msg);
 		System.out.println("elList: " + elList);
 		node.publishItems(Constants.QUEUE, elList);
+		QLog.info("end");
 	}
 
 	private ObjectNode users2JSON(List<User> users) throws QueuePluginException {
+		QLog.info("started");
 		// for (int i = 0; i < users.size(); i++) {
 		// System.out.println(users.get(i).getUsername());
 		// }
@@ -1482,11 +1498,13 @@ public class Messenger {
 
 		ObjectNode usersNode = mapper.createObjectNode();
 		usersNode.put("users", arrayNode);
+		QLog.info("end");
 		return usersNode;
 	}
 
 	private ObjectNode groups2JSON(List<Group> groups)
 			throws QueuePluginException {
+		QLog.info("started");
 		ArrayNode arrayNode = mapper.createArrayNode();
 		for (Group group : groups) {
 			arrayNode.add(mapper.createObjectNode()
@@ -1494,6 +1512,7 @@ public class Messenger {
 		}
 		ObjectNode groupsNode = mapper.createObjectNode();
 		groupsNode.put("groups", arrayNode);
+		QLog.info("end");
 		return groupsNode;
 	}
 
@@ -1501,6 +1520,7 @@ public class Messenger {
 	// TODO only for local admin, need to make to global also
 	private String wrapAdminAction(ObjectNode rootNode, User admin,
 			EntityManager em) throws QueuePluginException {
+		QLog.info("started");
 		String action = rootNode.findPath("type").textValue();
 		if (action.equalsIgnoreCase("createUser")
 				|| action.equalsIgnoreCase("editUser")) {
@@ -1891,36 +1911,46 @@ public class Messenger {
 					rootNode.get("ticketLogo").textValue());
 			QLog.info("Logos updated");
 		}
+		QLog.info("end");
 		return "success";
 	}
 
 	private ObjectNode init(User user, QueueWrapper queue, String param)
 			throws QueuePluginException {
+		QLog.info("started");
 		if (user.getRole().equals(Role.DASHBOARD)) {
+			QLog.info("end");
 			return initDashboard(user, queue);
 		} else if (user.getRole().equals(Role.MONITOR)
 				&& param.equals("initLocalAdmin")) {
+			QLog.info("end");
 			return initLocalAdmin(user, queue);
 		} else if (user.getRole().equals(Role.MONITOR)) {
+			QLog.info("end");
 			return initMonitor(user, queue);
 		} else if (user.getRole().equals(Role.UNIT)) {
+			QLog.info("end");
 			return initUnit(user, queue);
 		} else if (user.getRole().equals(Role.KIOSK)) {
+			QLog.info("end");
 			return initKiosk(user, queue);
 		} else if (user.getRole().equals(Role.LOCALADMIN)) {
+			QLog.info("end");
 			return initAdmin(user, queue);
 		} else if (user.getRole().equals(Role.SECOND_MONITOR)) {
+			QLog.info("end");
 			return initMonitorUnit(user, queue);
-		} else if (user.getRole().equals(Role.SECOND_MONITOR_DEMO)) {
-			return initMonitorUnit_demo(user, queue);
 		} else if (user.getRole().equals(Role.ANKETA)) {
+			QLog.info("end");
 			return initAnketa(user, queue);
 		}
+		QLog.info("end");
 		return null;
 	}
 
 	// maybe REQUIRES TRANSACTION!
 	public static void fire(Object param, EntityManager em) {
+		QLog.info("started");
 		if (XMPPServer.getInstance() != null) {
 			if (param instanceof Token) {
 				instance.onToken(param, em);
@@ -1932,9 +1962,11 @@ public class Messenger {
 				instance.onTicket(param, em);
 			}
 		}
+		QLog.info("end");
 	}
 
 	private void onToken(Object obj, EntityManager em) {
+		QLog.info("start");
 		System.out.println("onToken");
 		try {
 			Token token = (Token) obj;
@@ -2130,6 +2162,7 @@ public class Messenger {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		QLog.info("end");
 	}
 
 	private void playVideo(String group, String action, EntityManager em) {
@@ -2155,6 +2188,7 @@ public class Messenger {
 	}
 
 	private void onTicket(Object param, EntityManager em) {
+		QLog.info("start");
 		System.out.println("I just enter onTicket");
 
 		Ticket ticket = (Ticket) param;
@@ -2269,6 +2303,7 @@ public class Messenger {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		QLog.info("end");
 	}
 
 	private void onUnit(Object param) {
@@ -2368,6 +2403,7 @@ public class Messenger {
 
 	private ObjectNode initAdmin(final User user, QueueWrapper queue)
 			throws QueuePluginException {
+		QLog.info("start");
 		List<Group> groups = queue.getListGroups(user.getGroup());
 		ObjectNode rootNode = mapper.createObjectNode();
 		
@@ -2454,10 +2490,12 @@ public class Messenger {
 			rootNode.putAll(groups_);
 			rootNode.put("weekends", holyDatesNode);
 			// QLog.info(user.getGroup().getName());
+			QLog.info("end");
 			return rootNode.put("url", "/admin.html")
 					.put("group", groups.get(0).getName())
 					.put("lang", Language.toString(user.getLanguage()));
 		}
+		QLog.info("end");
 		return mapper.createObjectNode()
 				.put("url", "/admin.html")
 				.put("group", "null")
@@ -2493,6 +2531,7 @@ public class Messenger {
 
 	private ObjectNode initMonitorUnit(User user, QueueWrapper queue)
 			throws QueuePluginException {
+		QLog.info("start");
 		ObjectNode rootNode = mapper.createObjectNode();
 
 		QLog.info(user.getGroup().getParent().getName());
@@ -2548,59 +2587,13 @@ public class Messenger {
 				Messages.get("group.#0.shortname_RU", user.getGroup()
 						.getParent().getName()));
 		rootNode.put("group", groupNode);
-
-		return rootNode;
-	}
-
-	private ObjectNode initMonitorUnit_demo(User user, QueueWrapper queue)
-			throws QueuePluginException {
-		ObjectNode rootNode = mapper.createObjectNode();
-
-		// rootNode.put("url", "/secondMonitor.html");
-		rootNode.put("url", "/" + user.getGroup().getParent()
-				+ "/finished/astex.html");
-		ObjectNode groupNode = mapper.createObjectNode();
-
-		List<AnketaQuestions> questions = queue
-				.getEntityManager()
-				.createQuery(
-						"select q from" + " 	AnketaQuestions q" + " where"
-								+ "	q.group = :group)")
-				.setParameter("group", user.getGroup().getParent())
-				.getResultList();
-		System.out.println(user.getGroup().getParent());
-		System.out.println(questions.size()
-				+ "questions size------------------");
-		for (int i = 0; i < questions.size(); i++) {
-			System.out.println(questions.get(i));
-		}
-
-		ArrayNode arrayNode = mapper.createArrayNode();
-		for (AnketaQuestions q : questions) {
-			arrayNode.add(mapper.createObjectNode().put("Qname", q.getName()));
-			for (AnketaAnswers a : q.getAnswers()) {
-				arrayNode.add(mapper.createObjectNode().put("Aname",
-						a.getName()));
-			}
-		}
-
-		groupNode.put("answers", arrayNode);
-		groupNode.put("id", user.getGroup().getName());
-		groupNode.put(
-				"ru",
-				Messages.get("group.#0.name_RU", user.getGroup().getParent()
-						.getName()));
-		groupNode.put(
-				"rushort",
-				Messages.get("group.#0.shortname_RU", user.getGroup()
-						.getParent().getName()));
-		rootNode.put("group", groupNode);
-
+		QLog.info("end");
 		return rootNode;
 	}
 
 	private ObjectNode initKiosk(User user, QueueWrapper queue)
 			throws QueuePluginException {
+		QLog.info("started");
 		ObjectNode rootNode = mapper.createObjectNode();
 		String laneTree = user.getData();
 		if (laneTree != null) {
@@ -2727,10 +2720,12 @@ public class Messenger {
 				Messages.get("group.#0.shortname_RU", user.getGroup()
 						.getParent().getName()));
 		rootNode.put("group", groupNode);
+		QLog.info("end");
 		return rootNode;
 	}
 
 	private ObjectNode getUnitStatistics(Unit unit, QueueWrapper queue) {
+		QLog.info("start");
 		List<Token> tokens = queue
 				.getEntityManager()
 				.createQuery(
@@ -2820,11 +2815,13 @@ public class Messenger {
 		resultNode.put("tokens", tokensNode);
 
 		resultNode.put("stats", laneStatsNode);
+		QLog.info("end");
 		return resultNode;
 	}
 
 	private ObjectNode initUnit(User user, QueueWrapper queue)
 			throws QueuePluginException {
+		QLog.info("start");
 		Unit unit = (Unit) user;
 		
 		String firstName = unit.getFirstName() + " "
@@ -2901,13 +2898,15 @@ public class Messenger {
 
 //		rootNode.put("url", "/" + user.getGroup().getParent() + "/unit.html");
 		rootNode.put("url", "/unit.html");
+		QLog.info("end");
 		return rootNode;
 	}
 
 	private ObjectNode lanes2JSON(List<Lane> laneList) {
+		QLog.info("start");
 		ArrayNode arrayNode = mapper.createArrayNode();
 		for (Lane lane : laneList) {
-			System.out.println(lane.getUsername());
+//			System.out.println(lane.getUsername());
 			arrayNode
 					.add(mapper
 							.createObjectNode()
@@ -2924,10 +2923,12 @@ public class Messenger {
 		}
 		ObjectNode lanesNode = mapper.createObjectNode();
 		lanesNode.put("lanes", arrayNode);
+		QLog.info("end");
 		return lanesNode;
 	}
 
 	private ObjectNode units2JSON(List<Unit> unitList) {
+		QLog.info("start");
 		ArrayNode arrayNode = mapper.createArrayNode();
 		for (Unit unit : unitList) {
 			arrayNode
@@ -2943,10 +2944,12 @@ public class Messenger {
 		}
 		ObjectNode unitsNode = mapper.createObjectNode();
 		unitsNode.put("units", arrayNode);
+		QLog.info("end");
 		return unitsNode;
 	}
 
 	private ObjectNode units2JSON2(List<Unit> unitList) {
+		QLog.info("start");
 		ArrayNode arrayNode = mapper.createArrayNode();
 		ObjectNode unitsNode = mapper.createObjectNode();
 		for (Unit unit : unitList) {
@@ -2981,11 +2984,13 @@ public class Messenger {
 							.put("lanes", unitsNode2));
 		}
 		unitsNode.put("units", arrayNode);
+		QLog.info("end");
 		return unitsNode;
 	}
 
 	private ObjectNode initDashboard(User user, QueueWrapper queue)
 			throws QueuePluginException {
+		QLog.info("start");
 		Dashboard dashboard = (Dashboard) user;
 		List<String> laneNameList = new ArrayList<String>();
 		for (Lane lane : dashboard.getDashboardLanes()) {
@@ -3042,6 +3047,7 @@ public class Messenger {
 				"group",
 				Messages.get("group.#0.name_RU", user.getGroup().getParent()
 						.getName()));
+		QLog.info("end");
 		return rootNode;
 	}
 
@@ -3049,6 +3055,7 @@ public class Messenger {
 	// раз приходили
 	private ObjectNode initMonitor(User user, QueueWrapper queue)
 			throws QueuePluginException {
+		QLog.info("start");
 		List<Unit> units = queue
 				.getEntityManager()
 				.createQuery(
@@ -3279,7 +3286,6 @@ public class Messenger {
 					"markAverage",
 					(markAverage == 0) ? "0.000" : String.format("%.3g%n",
 							markAverage));
-
 			unitsNode.add(unitNode);
 		}
 		ArrayNode lanesNode = mapper.createArrayNode();
@@ -3431,6 +3437,7 @@ public class Messenger {
 
 		String dateRepresent = dateNow;
 		rootNode.put("dateRepresent", dateRepresent);
+		QLog.info("end");
 		return rootNode;
 	}
 

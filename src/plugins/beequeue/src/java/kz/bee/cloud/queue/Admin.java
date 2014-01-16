@@ -49,11 +49,14 @@ public class Admin {
 	}
 	
 	public Admin(EntityManager em) {
+		QLog.info("started");
 		this.em = em;
+		QLog.info("end");
 	}
 	
 	public void createUnit(String username,String password,String firstName,String lastName,
 			Group group,Set<Lane> lanes,String window,String workStart,String workFinish) throws QueuePluginException{
+		QLog.info("started");
 		if(em.find(Unit.class,username)!=null){
 			throw new QueuePluginException("unit.exist:"+username);
 		}
@@ -73,9 +76,11 @@ public class Admin {
 		}
 		em.persist(unit);
 		QLog.info("Unit #0 created",username);
+		QLog.info("end");
 	}
 	
 	public void createDashboard(String username,String password,Group group,Set<Lane> lanes) throws QueuePluginException{
+		QLog.info("started");
 		if(em.find(Dashboard.class,username)!=null){
 			throw new QueuePluginException("dashboard.exist:"+username);
 		}
@@ -90,9 +95,11 @@ public class Admin {
 		}
 		em.persist(dash);
 		QLog.info("Dashboard #0 created",username);
+		QLog.info("end");
 	}
 	
 	public void createKiosk(String username,String password,Group group,String jsonTemplate) throws QueuePluginException{
+		QLog.info("started");
 		if(em.find(User.class,username)!=null){
 			throw new QueuePluginException("user.exist:"+username);
 		}
@@ -108,11 +115,11 @@ public class Admin {
 			e.printStackTrace();
 		}
 		em.persist(user);
-		
+		QLog.info("end");
 		QLog.info("Kiosk #0 created",username);
 	}
 	public void createSecondMonitor(String username, String password,Group group) throws QueuePluginException {
-		System.out.println("createSecondMonitor");
+		QLog.info("started");
 		if(em.find(MonitorUnit.class,username)!=null){
 			throw new QueuePluginException("user.exist:"+username);
 		}
@@ -127,12 +134,12 @@ public class Admin {
 			e.printStackTrace();
 		}
 		em.persist(mu1);
-		
+		QLog.info("end");
 		QLog.info("Second Monitor #0 created",username);
 	}
 	
 	public void createMonitor(String username, String password,Group group) throws QueuePluginException {
-		System.out.println("createMonitor");
+		QLog.info("started");
 		if(em.find(User.class,username)!=null){
 			throw new QueuePluginException("user.exist:"+username);
 		}
@@ -147,12 +154,13 @@ public class Admin {
 			
 		}
 		em.persist(monitor);
-		
+		QLog.info("end");
 		QLog.info("Monitor #0 created",username);
 	}
 	
 	public void createLane(String laneName,String laneKK,String laneRU,String startRange,
 			String endRange,String color,Group group,String priority) throws QueuePluginException{
+		QLog.info("started");
 		if(em.find(Lane.class,laneName)!=null){
 			throw new QueuePluginException("lane.exist:"+laneName);
 		}
@@ -171,11 +179,12 @@ public class Admin {
 		
 		Messages.set(Language.RU,String.format("lane.%s.name",laneName),laneRU);
 		Messages.set(Language.KK,String.format("lane.%s.name",laneName),laneKK);
-		
+		QLog.info("end");
 		QLog.info("Lane #0 created",laneName);
 	}
 	
 	public void createWeekend(String date, String time, String groupName) throws QueuePluginException{
+		QLog.info("started");
 		Group group = em.find(Group.class,groupName);
 		Weekend weekend = new Weekend();
 		weekend.setGroup(group);
@@ -185,6 +194,7 @@ public class Admin {
 		weekend.setStart(new Date(cal.getTime().getTime()));
 		em.persist(weekend);
 		QLog.info("Weekend #0 created", date);
+		QLog.info("end");
 	}
 	
 	public Weekend getLastItem(){
